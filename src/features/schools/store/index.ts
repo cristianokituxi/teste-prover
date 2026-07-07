@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { SchoolRepository } from "@/src/features/schools/repository";
 import type { School, SchoolInput } from "@/src/features/schools/types";
-import { useClassStore } from "@/src/features/classes/store";
+import { removeClassesForSchool } from "@/src/shared/store/crossStoreSync";
 
 type SchoolState = {
   schools: School[];
@@ -73,10 +73,7 @@ export const useSchoolStore = create<SchoolState>((set) => ({
       await repository.delete(id);
       const schools = await repository.list();
       set({ schools });
-      // Remove turmas orfas da store de classes
-      const classStore = useClassStore.getState();
-      const { [id]: _, ...rest } = classStore.classesBySchool;
-      useClassStore.setState({ classesBySchool: rest });
+      removeClassesForSchool(id);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro ao excluir escola.";
       set({ errorMessage: message });

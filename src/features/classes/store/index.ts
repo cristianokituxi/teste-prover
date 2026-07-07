@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { ClassRepository } from "@/src/features/classes/repository";
 import type { SchoolClass, SchoolClassInput } from "@/src/features/classes/types";
-import { useSchoolStore } from "@/src/features/schools/store";
+import { refreshSchoolClassCounts } from "@/src/shared/store/crossStoreSync";
 
 type ClassState = {
   classesBySchool: Record<string, SchoolClass[]>;
@@ -17,10 +17,6 @@ type ClassState = {
 };
 
 const repository = new ClassRepository();
-
-function refreshSchoolStore() {
-  useSchoolStore.getState().fetchSchools().catch(() => {});
-}
 
 export const useClassStore = create<ClassState>((set, get) => ({
   classesBySchool: {},
@@ -47,7 +43,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       await repository.create(schoolId, input);
       const classes = await repository.listBySchool(schoolId);
       set({ classesBySchool: { ...get().classesBySchool, [schoolId]: classes } });
-      refreshSchoolStore();
+      refreshSchoolClassCounts();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro ao criar turma.";
       set({ errorMessage: message });
@@ -78,7 +74,7 @@ export const useClassStore = create<ClassState>((set, get) => ({
       await repository.delete(classId);
       const classes = await repository.listBySchool(schoolId);
       set({ classesBySchool: { ...get().classesBySchool, [schoolId]: classes } });
-      refreshSchoolStore();
+      refreshSchoolClassCounts();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro ao excluir turma.";
       set({ errorMessage: message });
