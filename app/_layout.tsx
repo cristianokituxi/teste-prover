@@ -10,9 +10,6 @@ import { useEffect } from "react";
 import { ToastContainer } from "@/src/shared/components/ToastContainer";
 import { OfflineBanner } from "@/src/shared/components/OfflineBanner";
 import { useAuthStore } from "@/src/shared/store/useAuthStore";
-import { startMockServer } from "@/src/shared/services/mockServer";
-
-startMockServer();
 
 export default function RootLayout() {
   const router = useRouter();

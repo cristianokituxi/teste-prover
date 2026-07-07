@@ -1,65 +1,112 @@
-const API_BASE_URL = "https://mock.api.local";
+import { db } from "@/src/shared/services/db";
+import type { School, SchoolClass } from "@/src/features/schools/types";
+import type { SchoolInput } from "@/src/features/schools/types";
+import type { SchoolClassInput } from "@/src/features/classes/types";
+import type { Shift } from "@/src/features/schools/types";
 
-type RequestConfig = {
-  method?: "GET" | "POST" | "PUT" | "DELETE";
-  body?: unknown;
-  params?: Record<string, string>;
-};
+const SIMULATED_LATENCY_MS = 150;
 
-async function request<T>(path: string, config: RequestConfig = {}): Promise<T> {
-  const { method = "GET", body, params } = config;
-
-  let url = `${API_BASE_URL}${path}`;
-  if (params) {
-    const searchParams = new URLSearchParams(params);
-    url += `?${searchParams.toString()}`;
-  }
-
-  const response = await fetch(url, {
-    method,
-    headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    let message = "Erro inesperado ao comunicar com o servidor.";
-    try {
-      const errorBody = (await response.json()) as { message?: string } | null;
-      if (errorBody?.message) {
-        message = errorBody.message;
-      }
-    } catch {
-      // ignore JSON parse errors
-    }
-    throw new Error(message);
-  }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-
-  const data = await response.json();
-  return data as T;
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export const apiClient = {
   async get<T>(path: string, config?: { params?: Record<string, string> }): Promise<{ data: T }> {
-    const data = await request<T>(path, { method: "GET", params: config?.params });
-    return { data };
+    await delay(SIMULATED_LATENCY_MS);
+
+    if (path === "/schools") {
+      const schools = await db.listSchools();
+      return { data: schools as T };
+    }
+
+    if (path === "/classes" && config?.params?.schoolId) {
+      const classes = await db.listClasses(config.params.schoolId);
+      return { data: classes as T };
+    }
+
+    throw new Error(`Rota não encontrada: GET ${path}`);
   },
 
   async post<T>(path: string, body?: unknown): Promise<{ data: T }> {
-    const data = await request<T>(path, { method: "POST", body });
-    return { data };
+    await delay(SIMULATED_LATENCY_MS);
+
+    if (path === "/schools") {
+      const input = body as SchoolInput;
+      if (!input?.name?.trim() || !input?.address?.trim()) {
+        throw new Error("Nome e endereço são obrigatórios.");
+      }
+      const school = await db.createSchool({ name: input.name.trim(), address: input.address.trim() });
+      return { data: school as T };
+    }
+
+    if (path === "/classes") {
+      const payload = body as SchoolClassInput & { schoolId?: string };
+      if (!payload?.schoolId || !(await db.hasSchool(payload.schoolId))) {
+        throw new Error("Escola não encontrada.");
+      }
+      if (!payload?.name?.trim() || !payload?.shift || !payload?.year) {
+        throw new Error("Nome, turno e ano letivo são obrigatórios.");
+      }
+      const cls = await db.createClass(payload.schoolId, {
+        name: payload.name.trim(),
+        shift: payload.shift as Shift,
+        year: payload.year,
+      });
+      return { data: cls as T };
+    }
+
+    throw new Error(`Rota não encontrada: POST ${path}`);
   },
 
   async put<T>(path: string, body?: unknown): Promise<{ data: T }> {
-    const data = await request<T>(path, { method: "PUT", body });
-    return { data };
+    await delay(SIMULATED_LATENCY_MS);
+
+    const schoolMatch = path.match(/^\/schools\/([^/]+)$/);
+    if (schoolMatch) {
+      const input = body as SchoolInput;
+      if (!input?.name?.trim() || !input?.address?.trim()) {
+        throw new Error("Nome e endereço são obrigatórios.");
+      }
+      const updated = await db.updateSchool(schoolMatch[1], { name: input.name.trim(), address: input.address.trim() });
+      if (!updated) throw new Error("Escola não encontrada.");
+      return { data: updated as T };
+    }
+
+    const classMatch = path.match(/^\/classes\/([^/]+)$/);
+    if (classMatch) {
+      const input = body as SchoolClassInput;
+      if (!input?.name?.trim() || !input?.shift || !input?.year) {
+        throw new Error("Nome, turno e ano letivo são obrigatórios.");
+      }
+      const updated = await db.updateClass(classMatch[1], {
+        name: input.name.trim(),
+        shift: input.shift as Shift,
+        year: input.year,
+      });
+      if (!updated) throw new Error("Turma não encontrada.");
+      return { data: updated as T };
+    }
+
+    throw new Error(`Rota não encontrada: PUT ${path}`);
   },
 
   async delete(path: string): Promise<{ data: void }> {
-    const data = await request<void>(path, { method: "DELETE" });
-    return { data };
+    await delay(SIMULATED_LATENCY_MS);
+
+    const schoolMatch = path.match(/^\/schools\/([^/]+)$/);
+    if (schoolMatch) {
+      const removed = await db.deleteSchool(schoolMatch[1]);
+      if (!removed) throw new Error("Escola não encontrada.");
+      return { data: undefined };
+    }
+
+    const classMatch = path.match(/^\/classes\/([^/]+)$/);
+    if (classMatch) {
+      const removed = await db.deleteClass(classMatch[1]);
+      if (!removed) throw new Error("Turma não encontrada.");
+      return { data: undefined };
+    }
+
+    throw new Error(`Rota não encontrada: DELETE ${path}`);
   },
 };
