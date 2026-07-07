@@ -1,13 +1,15 @@
-import { Box, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
+import { Ionicons } from "@expo/vector-icons";
+import { Box, Button, ButtonText, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
 
 import type { School } from "@/src/features/schools/types";
 
 type SchoolCardProps = {
   school: School;
   onPress: (school: School) => void;
+  onClassesPress: (school: School) => void;
 };
 
-export function SchoolCard({ school, onPress }: SchoolCardProps) {
+export function SchoolCard({ school, onPress, onClassesPress }: SchoolCardProps) {
   const isEmpty = school.classCount === 0;
   const initials = school.name
     .split(" ")
@@ -17,19 +19,20 @@ export function SchoolCard({ school, onPress }: SchoolCardProps) {
     .toUpperCase();
 
   return (
-    <Pressable
-      onPress={() => onPress(school)}
-      sx={{ _pressed: { opacity: 0.85, transform: [{ scale: 0.985 }] } }}
+    <Box
+      borderWidth={1}
+      borderColor="$coolGray300"
+      borderRadius="$lg"
+      p="$4"
+      bg="$white"
+      minHeight={124}
     >
-      <Box
-        borderWidth={1}
-        borderColor="$coolGray300"
-        borderRadius="$lg"
-        p="$4"
-        bg="$white"
-        minHeight={124}
-      >
-        <VStack space="md">
+      <VStack space="md">
+        <Pressable
+          onPress={() => onPress(school)}
+          sx={{ _pressed: { opacity: 0.7 } }}
+          accessibilityLabel={`Editar ${school.name}`}
+        >
           <HStack justifyContent="space-between" alignItems="center">
             <HStack alignItems="center" space="sm" flex={1}>
               <Box
@@ -65,20 +68,26 @@ export function SchoolCard({ school, onPress }: SchoolCardProps) {
               </Text>
             </Box>
           </HStack>
+        </Pressable>
 
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text size="sm" color="$coolGray700">
-              {school.classCount} turma(s)
-            </Text>
-          </HStack>
+        <HStack justifyContent="space-between" alignItems="center">
+          <Text size="sm" color="$coolGray700">
+            {school.classCount} turma(s)
+          </Text>
+        </HStack>
 
-          <HStack justifyContent="flex-end" alignItems="center">
-            <Text size="sm" color="$blue700" bold>
-              Ver turmas {">"}
-            </Text>
+        <Button
+          size="sm"
+          bg="$blue600"
+          onPress={() => onClassesPress(school)}
+          accessibilityLabel={`Gerenciar turmas de ${school.name}`}
+        >
+          <HStack alignItems="center" space="xs">
+            <Ionicons name="people-outline" size={16} color="#ffffff" />
+            <ButtonText>Gerenciar turmas</ButtonText>
           </HStack>
-        </VStack>
-      </Box>
-    </Pressable>
+        </Button>
+      </VStack>
+    </Box>
   );
 }

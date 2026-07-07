@@ -22,19 +22,23 @@ import { MetricCard } from "@/src/shared/components/MetricCard";
 import { ScreenContainer } from "@/src/shared/components/ScreenContainer";
 import { SearchBar } from "@/src/shared/components/SearchBar";
 import { startMockServer } from "@/src/shared/services/mockServer";
+import { db } from "@/src/shared/services/db";
+import { useSync } from "@/src/shared/hooks/useSync";
+import { SyncStatusBadge } from "@/src/shared/components/SyncStatusBadge";
 
 type QuickFilter = "all" | "with-classes" | "without-classes";
 
 export default function SchoolsListPage() {
   const router = useRouter();
   const { schools, isLoading, errorMessage, fetchSchools, clearError } = useSchools();
+  const { isOnline, pendingCount, lastSyncAt } = useSync();
   const [query, setQuery] = useState("");
   const [quickFilter, setQuickFilter] = useState<QuickFilter>("all");
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     startMockServer();
-    fetchSchools().catch(() => {});
+    db.init().then(() => fetchSchools().catch(() => {}));
   }, [fetchSchools]);
 
   const onRefresh = useCallback(async () => {
@@ -105,6 +109,22 @@ export default function SchoolsListPage() {
           />
         </HStack>
 
+        <Box bg="$white" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+          <HStack justifyContent="space-between" alignItems="center">
+            <HStack space="sm" alignItems="center">
+              <SyncStatusBadge status={isOnline ? "synced" : "pending"}>
+                {isOnline ? "Conectado" : "Offline"}
+              </SyncStatusBadge>
+              {pendingCount > 0 ? (
+                <SyncStatusBadge status="pending">{pendingCount} pendente(s)</SyncStatusBadge>
+              ) : null}
+            </HStack>
+            <Text size="xs" color="$coolGray600">
+              Última sinc.: {lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—"}
+            </Text>
+          </HStack>
+        </Box>
+
         {errorMessage ? (
           <Box bg="$red100" p="$3" borderRadius="$md">
             <Text>{errorMessage}</Text>
@@ -173,7 +193,8 @@ export default function SchoolsListPage() {
               <SchoolCard
                 key={school.id}
                 school={school}
-                onPress={() => router.push(`/(tabs)/schools/${school.id}/classes`)}
+                onPress={() => router.push(`/(tabs)/schools/${school.id}/edit`)}
+                onClassesPress={() => router.push(`/(tabs)/schools/${school.id}/classes`)}
               />
             ))}
           </VStack>

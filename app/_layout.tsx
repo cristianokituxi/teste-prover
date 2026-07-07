@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 
 import { ToastContainer } from "@/src/shared/components/ToastContainer";
+import { OfflineBanner } from "@/src/shared/components/OfflineBanner";
 import { useAuthStore } from "@/src/shared/store/useAuthStore";
 
 export default function RootLayout() {
@@ -46,6 +47,7 @@ export default function RootLayout() {
       <GluestackUIProvider config={config}>
         <StatusBar style="dark" />
         <ToastContainer />
+        <OfflineBanner />
         <Stack screenOptions={{ headerTitleStyle: { fontWeight: "600" } }}>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(auth)/login" options={{ headerShown: false }} />

@@ -125,19 +125,13 @@ export default function SchoolClassesPage() {
   };
 
   return (
+    <Box flex={1}>
     <ScreenContainer>
       <Tabs.Screen
         options={{
           headerTitle: school?.name ?? "Turmas",
           headerRight: () => (
             <HStack space="sm">
-              <Pressable
-                onPress={() => router.push(`/(tabs)/schools/${schoolId}/classes-create`)}
-                hitSlop={12}
-                accessibilityLabel="Adicionar turma"
-              >
-                <Ionicons name="add-circle-outline" size={26} color="#2563eb" />
-              </Pressable>
               <Pressable
                 onPress={() => router.push(`/(tabs)/schools/${schoolId}/edit`)}
                 hitSlop={12}
@@ -267,7 +261,7 @@ export default function SchoolClassesPage() {
           <EmptyState
             iconName="people-outline"
             title="Nenhuma turma encontrada"
-            message="Cadastre turmas para esta escola usando o botão no cabeçalho."
+            message="Use o botão flutuante (+) para cadastrar a primeira turma."
           />
         ) : null}
 
@@ -301,5 +295,29 @@ export default function SchoolClassesPage() {
         onCancel={() => setDeletingSchool(false)}
       />
     </ScreenContainer>
+
+      <Pressable
+        onPress={() => router.push(`/(tabs)/schools/${schoolId}/classes-create`)}
+        position="absolute"
+        bottom="$8"
+        right="$6"
+        w={56}
+        h={56}
+        borderRadius="$full"
+        bg="$blue600"
+        alignItems="center"
+        justifyContent="center"
+        accessibilityLabel="Adicionar turma"
+        sx={{
+          shadowColor: "#000",
+          shadowOpacity: 0.25,
+          shadowRadius: 6,
+          elevation: 6,
+          _pressed: { bg: "$blue700", transform: [{ scale: 0.95 }] },
+        }}
+      >
+        <Ionicons name="add" size={28} color="#ffffff" />
+      </Pressable>
+    </Box>
   );
 }

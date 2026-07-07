@@ -17,35 +17,18 @@ function emptyResponse(status = 204): Response {
   return new Response(null, { status });
 }
 
-function parsePath(pathname: string): { segments: string[]; query: URLSearchParams } {
-  try {
-    const url = new URL(pathname, API_URL);
-    return { segments: url.pathname.replace(/^\/+/, "").split("/"), query: url.searchParams };
-  } catch {
-    return { segments: pathname.replace(/^\/+/, "").split("/"), query: new URLSearchParams() };
-  }
-}
-
 function parseBody(body?: BodyInit | null): unknown {
   if (typeof body !== "string") return null;
-  try {
-    return JSON.parse(body);
-  } catch {
-    return null;
-  }
+  try { return JSON.parse(body); } catch { return null; }
 }
 
-function handleRequest(url: string, method: string, body?: BodyInit | null): Response {
+async function handleRequest(url: string, method: string, body?: BodyInit | null): Promise<Response> {
   let path: string;
-  try {
-    path = new URL(url).pathname;
-  } catch {
-    path = url;
-  }
+  try { path = new URL(url).pathname; } catch { path = url; }
 
   // GET /schools
   if (path === "/schools" && method === "GET") {
-    return jsonResponse(db.listSchools());
+    return jsonResponse(await db.listSchools());
   }
 
   // POST /schools
@@ -54,7 +37,7 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
     if (!payload?.name?.trim() || !payload?.address?.trim()) {
       return jsonResponse({ message: "Nome e endereço são obrigatórios." }, 400);
     }
-    return jsonResponse(db.createSchool({ name: payload.name.trim(), address: payload.address.trim() }), 201);
+    return jsonResponse(await db.createSchool({ name: payload.name.trim(), address: payload.address.trim() }), 201);
   }
 
   // PUT /schools/:id
@@ -64,7 +47,7 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
     if (!payload?.name?.trim() || !payload?.address?.trim()) {
       return jsonResponse({ message: "Nome e endereço são obrigatórios." }, 400);
     }
-    const updated = db.updateSchool(putSchoolMatch[1], { name: payload.name.trim(), address: payload.address.trim() });
+    const updated = await db.updateSchool(putSchoolMatch[1], { name: payload.name.trim(), address: payload.address.trim() });
     if (!updated) return jsonResponse({ message: "Escola não encontrada." }, 404);
     return jsonResponse(updated);
   }
@@ -72,7 +55,7 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
   // DELETE /schools/:id
   const deleteSchoolMatch = path.match(/^\/schools\/([^/]+)$/);
   if (deleteSchoolMatch && method === "DELETE") {
-    const removed = db.deleteSchool(deleteSchoolMatch[1]);
+    const removed = await db.deleteSchool(deleteSchoolMatch[1]);
     if (!removed) return jsonResponse({ message: "Escola não encontrada." }, 404);
     return emptyResponse(204);
   }
@@ -82,21 +65,21 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
     const urlObj = new URL(url);
     const schoolId = urlObj.searchParams.get("schoolId");
     if (!schoolId) return jsonResponse({ message: "schoolId é obrigatório." }, 400);
-    if (!db.hasSchool(schoolId)) return jsonResponse({ message: "Escola não encontrada." }, 404);
-    return jsonResponse(db.listClasses(schoolId));
+    if (!(await db.hasSchool(schoolId))) return jsonResponse({ message: "Escola não encontrada." }, 404);
+    return jsonResponse(await db.listClasses(schoolId));
   }
 
   // POST /classes
   if (path === "/classes" && method === "POST") {
     const payload = parseBody(body) as (Partial<SchoolClassInput> & { schoolId?: string }) | null;
-    if (!payload?.schoolId || !db.hasSchool(payload.schoolId)) {
+    if (!payload?.schoolId || !(await db.hasSchool(payload.schoolId))) {
       return jsonResponse({ message: "Escola não encontrada." }, 404);
     }
     if (!payload?.name?.trim() || !payload?.shift || !payload?.year) {
       return jsonResponse({ message: "Nome, turno e ano letivo são obrigatórios." }, 400);
     }
     return jsonResponse(
-      db.createClass(payload.schoolId, { name: payload.name.trim(), shift: payload.shift, year: payload.year }),
+      await db.createClass(payload.schoolId, { name: payload.name.trim(), shift: payload.shift, year: payload.year }),
       201,
     );
   }
@@ -108,11 +91,7 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
     if (!payload?.name?.trim() || !payload?.shift || !payload?.year) {
       return jsonResponse({ message: "Nome, turno e ano letivo são obrigatórios." }, 400);
     }
-    const updated = db.updateClass(putClassMatch[1], {
-      name: payload.name.trim(),
-      shift: payload.shift,
-      year: payload.year,
-    });
+    const updated = await db.updateClass(putClassMatch[1], { name: payload.name.trim(), shift: payload.shift, year: payload.year });
     if (!updated) return jsonResponse({ message: "Turma não encontrada." }, 404);
     return jsonResponse(updated);
   }
@@ -120,7 +99,7 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
   // DELETE /classes/:id
   const deleteClassMatch = path.match(/^\/classes\/([^/]+)$/);
   if (deleteClassMatch && method === "DELETE") {
-    const removed = db.deleteClass(deleteClassMatch[1]);
+    const removed = await db.deleteClass(deleteClassMatch[1]);
     if (!removed) return jsonResponse({ message: "Turma não encontrada." }, 404);
     return emptyResponse(204);
   }
@@ -130,21 +109,15 @@ function handleRequest(url: string, method: string, body?: BodyInit | null): Res
 
 export function startMockServer(): void {
   if (isStarted) return;
-
   originalFetch = global.fetch;
 
   global.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
-
     if (url.startsWith(API_URL)) {
       const method = (init?.method ?? "GET").toUpperCase();
       return handleRequest(url, method, init?.body);
     }
-
-    if (!originalFetch) {
-      throw new Error("Fetch original não disponível.");
-    }
-
+    if (!originalFetch) throw new Error("Fetch original não disponível.");
     return originalFetch(input, init);
   };
 
@@ -152,9 +125,7 @@ export function startMockServer(): void {
 }
 
 export function stopMockServer(): void {
-  if (originalFetch) {
-    global.fetch = originalFetch;
-  }
+  if (originalFetch) global.fetch = originalFetch;
   originalFetch = null;
   isStarted = false;
 }

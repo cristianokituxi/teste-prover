@@ -1,20 +1,65 @@
-import axios from "axios";
-
 const API_BASE_URL = "https://mock.api.local";
 
-export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: { "Content-Type": "application/json" },
-});
+type RequestConfig = {
+  method?: "GET" | "POST" | "PUT" | "DELETE";
+  body?: unknown;
+  params?: Record<string, string>;
+};
 
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (axios.isAxiosError(error)) {
-      const message = error.response?.data?.message ?? "Erro inesperado ao comunicar com o servidor.";
-      return Promise.reject(new Error(message));
+async function request<T>(path: string, config: RequestConfig = {}): Promise<T> {
+  const { method = "GET", body, params } = config;
+
+  let url = `${API_BASE_URL}${path}`;
+  if (params) {
+    const searchParams = new URLSearchParams(params);
+    url += `?${searchParams.toString()}`;
+  }
+
+  const response = await fetch(url, {
+    method,
+    headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+
+  if (!response.ok) {
+    let message = "Erro inesperado ao comunicar com o servidor.";
+    try {
+      const errorBody = (await response.json()) as { message?: string } | null;
+      if (errorBody?.message) {
+        message = errorBody.message;
+      }
+    } catch {
+      // ignore JSON parse errors
     }
-    return Promise.reject(new Error("Erro inesperado ao comunicar com o servidor."));
+    throw new Error(message);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const data = await response.json();
+  return data as T;
+}
+
+export const apiClient = {
+  async get<T>(path: string, config?: { params?: Record<string, string> }): Promise<{ data: T }> {
+    const data = await request<T>(path, { method: "GET", params: config?.params });
+    return { data };
   },
-);
+
+  async post<T>(path: string, body?: unknown): Promise<{ data: T }> {
+    const data = await request<T>(path, { method: "POST", body });
+    return { data };
+  },
+
+  async put<T>(path: string, body?: unknown): Promise<{ data: T }> {
+    const data = await request<T>(path, { method: "PUT", body });
+    return { data };
+  },
+
+  async delete(path: string): Promise<{ data: void }> {
+    const data = await request<void>(path, { method: "DELETE" });
+    return { data };
+  },
+};
