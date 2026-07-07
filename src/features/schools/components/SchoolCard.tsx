@@ -57,12 +57,7 @@ export function SchoolCard({ school, onPress, onClassesPress }: SchoolCardProps)
               </VStack>
             </HStack>
 
-            <Box
-              px="$2"
-              py="$1"
-              borderRadius="$full"
-              bg={isEmpty ? "$amber100" : "$emerald100"}
-            >
+            <Box px="$2" py="$1" borderRadius="$full" bg={isEmpty ? "$amber100" : "$emerald100"}>
               <Text size="xs" color={isEmpty ? "$amber800" : "$emerald800"}>
                 {isEmpty ? "Sem turmas" : "Ativa"}
               </Text>

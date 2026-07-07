@@ -19,12 +19,24 @@ function emptyResponse(status = 204): Response {
 
 function parseBody(body?: BodyInit | null): unknown {
   if (typeof body !== "string") return null;
-  try { return JSON.parse(body); } catch { return null; }
+  try {
+    return JSON.parse(body);
+  } catch {
+    return null;
+  }
 }
 
-async function handleRequest(url: string, method: string, body?: BodyInit | null): Promise<Response> {
+async function handleRequest(
+  url: string,
+  method: string,
+  body?: BodyInit | null,
+): Promise<Response> {
   let path: string;
-  try { path = new URL(url).pathname; } catch { path = url; }
+  try {
+    path = new URL(url).pathname;
+  } catch {
+    path = url;
+  }
 
   // GET /schools
   if (path === "/schools" && method === "GET") {
@@ -37,7 +49,10 @@ async function handleRequest(url: string, method: string, body?: BodyInit | null
     if (!payload?.name?.trim() || !payload?.address?.trim()) {
       return jsonResponse({ message: "Nome e endereço são obrigatórios." }, 400);
     }
-    return jsonResponse(await db.createSchool({ name: payload.name.trim(), address: payload.address.trim() }), 201);
+    return jsonResponse(
+      await db.createSchool({ name: payload.name.trim(), address: payload.address.trim() }),
+      201,
+    );
   }
 
   // PUT /schools/:id
@@ -47,7 +62,10 @@ async function handleRequest(url: string, method: string, body?: BodyInit | null
     if (!payload?.name?.trim() || !payload?.address?.trim()) {
       return jsonResponse({ message: "Nome e endereço são obrigatórios." }, 400);
     }
-    const updated = await db.updateSchool(putSchoolMatch[1], { name: payload.name.trim(), address: payload.address.trim() });
+    const updated = await db.updateSchool(putSchoolMatch[1], {
+      name: payload.name.trim(),
+      address: payload.address.trim(),
+    });
     if (!updated) return jsonResponse({ message: "Escola não encontrada." }, 404);
     return jsonResponse(updated);
   }
@@ -65,7 +83,8 @@ async function handleRequest(url: string, method: string, body?: BodyInit | null
     const urlObj = new URL(url);
     const schoolId = urlObj.searchParams.get("schoolId");
     if (!schoolId) return jsonResponse({ message: "schoolId é obrigatório." }, 400);
-    if (!(await db.hasSchool(schoolId))) return jsonResponse({ message: "Escola não encontrada." }, 404);
+    if (!(await db.hasSchool(schoolId)))
+      return jsonResponse({ message: "Escola não encontrada." }, 404);
     return jsonResponse(await db.listClasses(schoolId));
   }
 
@@ -79,7 +98,11 @@ async function handleRequest(url: string, method: string, body?: BodyInit | null
       return jsonResponse({ message: "Nome, turno e ano letivo são obrigatórios." }, 400);
     }
     return jsonResponse(
-      await db.createClass(payload.schoolId, { name: payload.name.trim(), shift: payload.shift, year: payload.year }),
+      await db.createClass(payload.schoolId, {
+        name: payload.name.trim(),
+        shift: payload.shift,
+        year: payload.year,
+      }),
       201,
     );
   }
@@ -91,7 +114,11 @@ async function handleRequest(url: string, method: string, body?: BodyInit | null
     if (!payload?.name?.trim() || !payload?.shift || !payload?.year) {
       return jsonResponse({ message: "Nome, turno e ano letivo são obrigatórios." }, 400);
     }
-    const updated = await db.updateClass(putClassMatch[1], { name: payload.name.trim(), shift: payload.shift, year: payload.year });
+    const updated = await db.updateClass(putClassMatch[1], {
+      name: payload.name.trim(),
+      shift: payload.shift,
+      year: payload.year,
+    });
     if (!updated) return jsonResponse({ message: "Turma não encontrada." }, 404);
     return jsonResponse(updated);
   }
@@ -112,7 +139,8 @@ export function startMockServer(): void {
   originalFetch = global.fetch;
 
   global.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+    const url =
+      typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
     if (url.startsWith(API_URL)) {
       const method = (init?.method ?? "GET").toUpperCase();
       return handleRequest(url, method, init?.body);

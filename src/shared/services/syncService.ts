@@ -86,7 +86,12 @@ export const syncService = {
         const payload = item.payload as SchoolClassInput;
         const idx = classes.findIndex((c) => c.id === item.entityId);
         if (idx >= 0) {
-          classes[idx] = { ...classes[idx], name: payload.name, shift: payload.shift, year: payload.year };
+          classes[idx] = {
+            ...classes[idx],
+            name: payload.name,
+            shift: payload.shift,
+            year: payload.year,
+          };
           await storageService.saveClasses(classes);
         }
         break;

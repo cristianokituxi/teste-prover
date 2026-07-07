@@ -32,7 +32,13 @@ export const db = {
 
   async createSchool(data: { name: string; address: string }): Promise<School> {
     const id = createId();
-    const school: School = { id, name: data.name, address: data.address, classCount: 0, createdAt: now() };
+    const school: School = {
+      id,
+      name: data.name,
+      address: data.address,
+      classCount: 0,
+      createdAt: now(),
+    };
     const schools = await storageService.getSchools();
     schools.push(school);
     await storageService.saveSchools(schools);
@@ -79,7 +85,10 @@ export const db = {
     return classes.filter((c) => c.schoolId === schoolId);
   },
 
-  async createClass(schoolId: string, data: { name: string; shift: Shift; year: number }): Promise<SchoolClass> {
+  async createClass(
+    schoolId: string,
+    data: { name: string; shift: Shift; year: number },
+  ): Promise<SchoolClass> {
     const id = createId();
     const cls: SchoolClass = { id, schoolId, ...data, createdAt: now() };
     const classes = await storageService.getClasses();
@@ -92,7 +101,10 @@ export const db = {
     return cls;
   },
 
-  async updateClass(id: string, data: { name: string; shift: Shift; year: number }): Promise<SchoolClass | null> {
+  async updateClass(
+    id: string,
+    data: { name: string; shift: Shift; year: number },
+  ): Promise<SchoolClass | null> {
     const classes = await storageService.getClasses();
     const idx = classes.findIndex((c) => c.id === id);
     if (idx < 0) return null;

@@ -8,14 +8,47 @@ const CLASSES_KEY = "@desafio-prover:classes";
 let seedLoaded = false;
 
 const SEED_SCHOOLS: School[] = [
-  { id: "sch-1", name: "Escola Municipal Monteiro Lobato", address: "Rua das Acácias, 450 - Centro", classCount: 2, createdAt: new Date().toISOString() },
-  { id: "sch-2", name: "Escola Estadual Paulo Freire", address: "Av. dos Bandeirantes, 1200 - Jardins", classCount: 1, createdAt: new Date().toISOString() },
+  {
+    id: "sch-1",
+    name: "Escola Municipal Monteiro Lobato",
+    address: "Rua das Acácias, 450 - Centro",
+    classCount: 2,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "sch-2",
+    name: "Escola Estadual Paulo Freire",
+    address: "Av. dos Bandeirantes, 1200 - Jardins",
+    classCount: 1,
+    createdAt: new Date().toISOString(),
+  },
 ];
 
 const SEED_CLASSES: SchoolClass[] = [
-  { id: "cls-1", schoolId: "sch-1", name: "1º Ano A", shift: "Morning" as Shift, year: 2026, createdAt: new Date().toISOString() },
-  { id: "cls-2", schoolId: "sch-1", name: "2º Ano B", shift: "Afternoon" as Shift, year: 2026, createdAt: new Date().toISOString() },
-  { id: "cls-3", schoolId: "sch-2", name: "3º Ano C", shift: "Night" as Shift, year: 2026, createdAt: new Date().toISOString() },
+  {
+    id: "cls-1",
+    schoolId: "sch-1",
+    name: "1º Ano A",
+    shift: "Morning" as Shift,
+    year: 2026,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "cls-2",
+    schoolId: "sch-1",
+    name: "2º Ano B",
+    shift: "Afternoon" as Shift,
+    year: 2026,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    id: "cls-3",
+    schoolId: "sch-2",
+    name: "3º Ano C",
+    shift: "Night" as Shift,
+    year: 2026,
+    createdAt: new Date().toISOString(),
+  },
 ];
 
 export const storageService = {

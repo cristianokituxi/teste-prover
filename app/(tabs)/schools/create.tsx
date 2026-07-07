@@ -57,14 +57,20 @@ export default function CreateSchoolPage() {
             <HStack space="sm" alignItems="center">
               <Pressable onPress={() => router.replace("/(tabs)/schools/list")}>
                 <Box
-                  w="$10" h="$10" borderRadius="$full" bg="$blue600"
-                  alignItems="center" justifyContent="center"
+                  w="$10"
+                  h="$10"
+                  borderRadius="$full"
+                  bg="$blue600"
+                  alignItems="center"
+                  justifyContent="center"
                 >
                   <Ionicons name="arrow-back" size={18} color="#ffffff" />
                 </Box>
               </Pressable>
               <VStack flex={1}>
-                <Heading size="xl" color="$white">Nova escola</Heading>
+                <Heading size="xl" color="$white">
+                  Nova escola
+                </Heading>
                 <Text size="sm" color="$blue100">
                   Cadastre uma unidade escolar com informações precisas.
                 </Text>
@@ -72,32 +78,58 @@ export default function CreateSchoolPage() {
             </HStack>
             <HStack space="sm" flexWrap="wrap">
               <Box px="$3" py="$2" borderRadius="$full" bg="$blue600">
-                <Text size="xs" color="$white">Nome obrigatório</Text>
+                <Text size="xs" color="$white">
+                  Nome obrigatório
+                </Text>
               </Box>
               <Box px="$3" py="$2" borderRadius="$full" bg="$blue600">
-                <Text size="xs" color="$white">Endereço completo</Text>
+                <Text size="xs" color="$white">
+                  Endereço completo
+                </Text>
               </Box>
             </HStack>
           </VStack>
         </DecorativeHero>
 
         <HStack space="sm">
-          <Box flex={1} bg="$white" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+          <Box
+            flex={1}
+            bg="$white"
+            p="$4"
+            borderRadius="$xl"
+            borderWidth={1}
+            borderColor="$coolGray200"
+          >
             <HStack justifyContent="space-between" alignItems="center">
               <Ionicons name="business-outline" size={18} color="#1d4ed8" />
-              <Text size="xs" color="$blue700" bold>Etapa 1</Text>
+              <Text size="xs" color="$blue700" bold>
+                Etapa 1
+              </Text>
             </HStack>
-            <Text size="sm" bold mt="$3">Identidade</Text>
+            <Text size="sm" bold mt="$3">
+              Identidade
+            </Text>
             <Text size="xs" color="$coolGray600" mt="$1">
               Defina um nome claro para facilitar buscas.
             </Text>
           </Box>
-          <Box flex={1} bg="$white" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+          <Box
+            flex={1}
+            bg="$white"
+            p="$4"
+            borderRadius="$xl"
+            borderWidth={1}
+            borderColor="$coolGray200"
+          >
             <HStack justifyContent="space-between" alignItems="center">
               <Ionicons name="location-outline" size={18} color="#047857" />
-              <Text size="xs" color="$emerald700" bold>Etapa 2</Text>
+              <Text size="xs" color="$emerald700" bold>
+                Etapa 2
+              </Text>
             </HStack>
-            <Text size="sm" bold mt="$3">Localização</Text>
+            <Text size="sm" bold mt="$3">
+              Localização
+            </Text>
             <Text size="xs" color="$coolGray600" mt="$1">
               Informe o endereço da unidade escolar.
             </Text>
@@ -123,16 +155,30 @@ export default function CreateSchoolPage() {
               />
             </FormField>
 
-            <Box bg="$coolGray50" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+            <Box
+              bg="$coolGray50"
+              p="$4"
+              borderRadius="$xl"
+              borderWidth={1}
+              borderColor="$coolGray200"
+            >
               <VStack space="xs">
                 <HStack justifyContent="space-between" alignItems="center">
-                  <Text size="sm" bold>Pré-visualização</Text>
+                  <Text size="sm" bold>
+                    Pré-visualização
+                  </Text>
                   <Box px="$2" py="$1" borderRadius="$full" bg="$blue100">
-                    <Text size="xs" color="$blue700">Nova unidade</Text>
+                    <Text size="xs" color="$blue700">
+                      Nova unidade
+                    </Text>
                   </Box>
                 </HStack>
-                <Text size="lg" bold color="$coolGray900">{previewName}</Text>
-                <Text size="sm" color="$coolGray600">{previewAddress}</Text>
+                <Text size="lg" bold color="$coolGray900">
+                  {previewName}
+                </Text>
+                <Text size="sm" color="$coolGray600">
+                  {previewAddress}
+                </Text>
               </VStack>
             </Box>
 

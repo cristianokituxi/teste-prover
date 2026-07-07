@@ -52,8 +52,6 @@ export function useSearchClasses(schoolId: string, query: string): SchoolClass[]
   const normalized = query.trim().toLowerCase();
   if (!normalized) return classes;
   return classes.filter(
-    (c) =>
-      c.name.toLowerCase().includes(normalized) ||
-      c.shift.toLowerCase().includes(normalized),
+    (c) => c.name.toLowerCase().includes(normalized) || c.shift.toLowerCase().includes(normalized),
   );
 }

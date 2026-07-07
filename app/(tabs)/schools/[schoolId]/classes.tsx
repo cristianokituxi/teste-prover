@@ -126,175 +126,198 @@ export default function SchoolClassesPage() {
 
   return (
     <Box flex={1}>
-    <ScreenContainer>
-      <Tabs.Screen
-        options={{
-          headerTitle: school?.name ?? "Turmas",
-          headerRight: () => (
-            <HStack space="sm">
-              <Pressable
-                onPress={() => router.push(`/(tabs)/schools/${schoolId}/edit`)}
-                hitSlop={12}
-                accessibilityLabel="Editar escola"
-              >
-                <Ionicons name="pencil-outline" size={22} color="#64748b" />
-              </Pressable>
-              <Pressable onPress={() => setDeletingSchool(true)} hitSlop={12} accessibilityLabel="Excluir escola">
-                <Ionicons name="trash-outline" size={22} color="#dc2626" />
-              </Pressable>
-            </HStack>
-          ),
-        }}
-      />
-
-      <Box borderBottomWidth={1} borderColor="$coolGray200" mb="$4">
-        <Image source={{ uri: BANNER_URI }} style={{ width: "100%", height: 148 }} resizeMode="cover" />
-        <Box p="$3" bg="$coolGray100">
-          <Text bold>{school?.name ?? "Escola"}</Text>
-          <Text size="sm" color="$coolGray600">{school?.address ?? "Endereço não informado"}</Text>
-        </Box>
-      </Box>
-
-      <VStack space="lg">
-        <HStack space="sm">
-          <MetricCard
-            iconName="people-outline"
-            iconColor="#1d4ed8"
-            badgeText="Turmas ativas"
-            badgeTextColor="$blue700"
-            label="Total de turmas"
-            value={classes.length}
-          />
-          <MetricCard
-            iconName="layers-outline"
-            iconColor="#047857"
-            badgeText="Turnos"
-            badgeTextColor="$emerald700"
-            label="Diversidade"
-            value={new Set(classes.map((c) => c.shift)).size}
-          />
-        </HStack>
-
-        {errorMessage ? (
-          <Box bg="$red100" p="$3" borderRadius="$md">
-            <Text>{errorMessage}</Text>
-            <Button mt="$2" variant="outline" action="secondary" onPress={clearError}>
-              <ButtonText>Fechar</ButtonText>
-            </Button>
-          </Box>
-        ) : null}
-
-        {editing ? (
-          <Box bg="$white" p="$5" borderRadius="$2xl" borderWidth={1} borderColor="$coolGray200">
-            <VStack space="md">
-              <HStack justifyContent="space-between" alignItems="center">
-                <Heading size="md">Editar turma</Heading>
-                <Box px="$2" py="$1" borderRadius="$full" bg="$amber100">
-                  <Text size="xs" color="$amber700">Edição ativa</Text>
-                </Box>
-              </HStack>
-
-              <VStack space="xs">
-                <Text size="sm" bold color="$coolGray800">Nome da turma</Text>
-                <Input bg="$coolGray50" borderColor="$coolGray200">
-                  <InputField value={editName} onChangeText={setEditName} placeholder="Nome da turma" />
-                </Input>
-              </VStack>
-
-              <VStack space="xs">
-                <Text size="sm" bold color="$coolGray800">Ano letivo</Text>
-                <Input bg="$coolGray50" borderColor="$coolGray200">
-                  <InputField
-                    value={editYear}
-                    onChangeText={setEditYear}
-                    placeholder="Ex: 2026"
-                    keyboardType="numeric"
-                  />
-                </Input>
-              </VStack>
-
-              <VStack space="xs">
-                <Text size="sm" bold color="$coolGray800">Turno</Text>
-                <Pressable onPress={cycleShift}>
-                  <HStack
-                    bg="$coolGray50" p="$3" borderRadius="$xl"
-                    borderWidth={1} borderColor="$coolGray200"
-                    justifyContent="space-between" alignItems="center"
-                  >
-                    <Text>{SHIFT_LABELS[editShift]}</Text>
-                    <Ionicons name="swap-horizontal-outline" size={18} color="#475569" />
-                  </HStack>
+      <ScreenContainer>
+        <Tabs.Screen
+          options={{
+            headerTitle: school?.name ?? "Turmas",
+            headerRight: () => (
+              <HStack space="sm">
+                <Pressable
+                  onPress={() => router.push(`/(tabs)/schools/${schoolId}/edit`)}
+                  hitSlop={12}
+                  accessibilityLabel="Editar escola"
+                >
+                  <Ionicons name="pencil-outline" size={22} color="#64748b" />
                 </Pressable>
-              </VStack>
+                <Pressable
+                  onPress={() => setDeletingSchool(true)}
+                  hitSlop={12}
+                  accessibilityLabel="Excluir escola"
+                >
+                  <Ionicons name="trash-outline" size={22} color="#dc2626" />
+                </Pressable>
+              </HStack>
+            ),
+          }}
+        />
 
-              <Button onPress={handleUpdate} bg="$blue600">
-                <ButtonText>Salvar alterações</ButtonText>
-              </Button>
-              <Button variant="outline" action="secondary" onPress={cancelEdit}>
-                <ButtonText>Cancelar edição</ButtonText>
-              </Button>
-            </VStack>
-          </Box>
-        ) : null}
-
-        <VStack space="sm">
-          <HStack justifyContent="space-between" alignItems="center">
-            <Heading size="md">Turmas</Heading>
-            <Text size="xs" color="$coolGray600">{filtered.length} resultado(s)</Text>
-          </HStack>
-          <SearchBar
-            value={query}
-            onChangeText={setQuery}
-            onClear={() => setQuery("")}
-            placeholder="Buscar por nome ou turno"
+        <Box borderBottomWidth={1} borderColor="$coolGray200" mb="$4">
+          <Image
+            source={{ uri: BANNER_URI }}
+            style={{ width: "100%", height: 148 }}
+            resizeMode="cover"
           />
+          <Box p="$3" bg="$coolGray100">
+            <Text bold>{school?.name ?? "Escola"}</Text>
+            <Text size="sm" color="$coolGray600">
+              {school?.address ?? "Endereço não informado"}
+            </Text>
+          </Box>
+        </Box>
+
+        <VStack space="lg">
+          <HStack space="sm">
+            <MetricCard
+              iconName="people-outline"
+              iconColor="#1d4ed8"
+              badgeText="Turmas ativas"
+              badgeTextColor="$blue700"
+              label="Total de turmas"
+              value={classes.length}
+            />
+            <MetricCard
+              iconName="layers-outline"
+              iconColor="#047857"
+              badgeText="Turnos"
+              badgeTextColor="$emerald700"
+              label="Diversidade"
+              value={new Set(classes.map((c) => c.shift)).size}
+            />
+          </HStack>
+
+          {errorMessage ? (
+            <Box bg="$red100" p="$3" borderRadius="$md">
+              <Text>{errorMessage}</Text>
+              <Button mt="$2" variant="outline" action="secondary" onPress={clearError}>
+                <ButtonText>Fechar</ButtonText>
+              </Button>
+            </Box>
+          ) : null}
+
+          {editing ? (
+            <Box bg="$white" p="$5" borderRadius="$2xl" borderWidth={1} borderColor="$coolGray200">
+              <VStack space="md">
+                <HStack justifyContent="space-between" alignItems="center">
+                  <Heading size="md">Editar turma</Heading>
+                  <Box px="$2" py="$1" borderRadius="$full" bg="$amber100">
+                    <Text size="xs" color="$amber700">
+                      Edição ativa
+                    </Text>
+                  </Box>
+                </HStack>
+
+                <VStack space="xs">
+                  <Text size="sm" bold color="$coolGray800">
+                    Nome da turma
+                  </Text>
+                  <Input bg="$coolGray50" borderColor="$coolGray200">
+                    <InputField
+                      value={editName}
+                      onChangeText={setEditName}
+                      placeholder="Nome da turma"
+                    />
+                  </Input>
+                </VStack>
+
+                <VStack space="xs">
+                  <Text size="sm" bold color="$coolGray800">
+                    Ano letivo
+                  </Text>
+                  <Input bg="$coolGray50" borderColor="$coolGray200">
+                    <InputField
+                      value={editYear}
+                      onChangeText={setEditYear}
+                      placeholder="Ex: 2026"
+                      keyboardType="numeric"
+                    />
+                  </Input>
+                </VStack>
+
+                <VStack space="xs">
+                  <Text size="sm" bold color="$coolGray800">
+                    Turno
+                  </Text>
+                  <Pressable onPress={cycleShift}>
+                    <HStack
+                      bg="$coolGray50"
+                      p="$3"
+                      borderRadius="$xl"
+                      borderWidth={1}
+                      borderColor="$coolGray200"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Text>{SHIFT_LABELS[editShift]}</Text>
+                      <Ionicons name="swap-horizontal-outline" size={18} color="#475569" />
+                    </HStack>
+                  </Pressable>
+                </VStack>
+
+                <Button onPress={handleUpdate} bg="$blue600">
+                  <ButtonText>Salvar alterações</ButtonText>
+                </Button>
+                <Button variant="outline" action="secondary" onPress={cancelEdit}>
+                  <ButtonText>Cancelar edição</ButtonText>
+                </Button>
+              </VStack>
+            </Box>
+          ) : null}
+
+          <VStack space="sm">
+            <HStack justifyContent="space-between" alignItems="center">
+              <Heading size="md">Turmas</Heading>
+              <Text size="xs" color="$coolGray600">
+                {filtered.length} resultado(s)
+              </Text>
+            </HStack>
+            <SearchBar
+              value={query}
+              onChangeText={setQuery}
+              onClear={() => setQuery("")}
+              placeholder="Buscar por nome ou turno"
+            />
+          </VStack>
+
+          {isLoading ? (
+            <VStack space="sm">
+              <Loading />
+              <Skeleton />
+            </VStack>
+          ) : null}
+
+          {!isLoading && filtered.length === 0 ? (
+            <EmptyState
+              iconName="people-outline"
+              title="Nenhuma turma encontrada"
+              message="Use o botão flutuante (+) para cadastrar a primeira turma."
+            />
+          ) : null}
+
+          {!isLoading && filtered.length > 0 ? (
+            <VStack space="sm">
+              {filtered.map((c) => (
+                <ClassCard key={c.id} classItem={c} onEdit={startEdit} onDelete={setDeleting} />
+              ))}
+            </VStack>
+          ) : null}
         </VStack>
 
-        {isLoading ? (
-          <VStack space="sm">
-            <Loading />
-            <Skeleton />
-          </VStack>
-        ) : null}
+        <ModalDelete
+          isOpen={!!deleting}
+          title="Excluir turma"
+          message={`Deseja remover a turma "${deleting?.name}"? Esta ação não pode ser desfeita.`}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleting(null)}
+        />
 
-        {!isLoading && filtered.length === 0 ? (
-          <EmptyState
-            iconName="people-outline"
-            title="Nenhuma turma encontrada"
-            message="Use o botão flutuante (+) para cadastrar a primeira turma."
-          />
-        ) : null}
-
-        {!isLoading && filtered.length > 0 ? (
-          <VStack space="sm">
-            {filtered.map((c) => (
-              <ClassCard
-                key={c.id}
-                classItem={c}
-                onEdit={startEdit}
-                onDelete={setDeleting}
-              />
-            ))}
-          </VStack>
-        ) : null}
-      </VStack>
-
-      <ModalDelete
-        isOpen={!!deleting}
-        title="Excluir turma"
-        message={`Deseja remover a turma "${deleting?.name}"? Esta ação não pode ser desfeita.`}
-        onConfirm={handleDelete}
-        onCancel={() => setDeleting(null)}
-      />
-
-      <ModalDelete
-        isOpen={deletingSchool}
-        title="Excluir escola"
-        message={`Deseja remover permanentemente "${school?.name}" e todas as suas turmas? Esta ação não pode ser desfeita.`}
-        onConfirm={handleDeleteSchool}
-        onCancel={() => setDeletingSchool(false)}
-      />
-    </ScreenContainer>
+        <ModalDelete
+          isOpen={deletingSchool}
+          title="Excluir escola"
+          message={`Deseja remover permanentemente "${school?.name}" e todas as suas turmas? Esta ação não pode ser desfeita.`}
+          onConfirm={handleDeleteSchool}
+          onCancel={() => setDeletingSchool(false)}
+        />
+      </ScreenContainer>
 
       <Pressable
         onPress={() => router.push(`/(tabs)/schools/${schoolId}/classes-create`)}

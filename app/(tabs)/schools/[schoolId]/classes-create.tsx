@@ -42,8 +42,7 @@ export default function CreateClassPage() {
   const shift = SHIFTS[shiftIndex];
   const year = parseInt(yearText, 10);
 
-  const previewValid =
-    name.trim().length > 0 && !isNaN(year) && year >= 2000 && year <= 2100;
+  const previewValid = name.trim().length > 0 && !isNaN(year) && year >= 2000 && year <= 2100;
 
   const cycleShift = () => setShiftIndex((i) => (i + 1) % SHIFTS.length);
 
@@ -68,30 +67,62 @@ export default function CreateClassPage() {
       <Tabs.Screen options={{ headerTitle: "" }} />
 
       <Box borderBottomWidth={1} borderColor="$coolGray200" mb="$4">
-        <Image source={{ uri: BANNER_URI }} style={{ width: "100%", height: 128 }} resizeMode="cover" />
+        <Image
+          source={{ uri: BANNER_URI }}
+          style={{ width: "100%", height: 128 }}
+          resizeMode="cover"
+        />
         <Box p="$3" bg="$coolGray100">
           <Text bold>{school?.name ?? "Escola"}</Text>
-          <Text size="sm" color="$coolGray600">{school?.address ?? ""}</Text>
+          <Text size="sm" color="$coolGray600">
+            {school?.address ?? ""}
+          </Text>
         </Box>
       </Box>
 
       <VStack space="lg">
         <HStack space="sm">
-          <Box flex={1} bg="$white" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+          <Box
+            flex={1}
+            bg="$white"
+            p="$4"
+            borderRadius="$xl"
+            borderWidth={1}
+            borderColor="$coolGray200"
+          >
             <HStack justifyContent="space-between" alignItems="center">
               <Ionicons name="people-outline" size={18} color="#1d4ed8" />
-              <Text size="xs" color="$blue700" bold>Nome</Text>
+              <Text size="xs" color="$blue700" bold>
+                Nome
+              </Text>
             </HStack>
-            <Text size="sm" bold mt="$3">Identidade da turma</Text>
-            <Text size="xs" color="$coolGray600" mt="$1">Ex: 1º Ano A, 2º Ano B.</Text>
+            <Text size="sm" bold mt="$3">
+              Identidade da turma
+            </Text>
+            <Text size="xs" color="$coolGray600" mt="$1">
+              Ex: 1º Ano A, 2º Ano B.
+            </Text>
           </Box>
-          <Box flex={1} bg="$white" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+          <Box
+            flex={1}
+            bg="$white"
+            p="$4"
+            borderRadius="$xl"
+            borderWidth={1}
+            borderColor="$coolGray200"
+          >
             <HStack justifyContent="space-between" alignItems="center">
               <Ionicons name="time-outline" size={18} color="#047857" />
-              <Text size="xs" color="$emerald700" bold>Turno</Text>
+              <Text size="xs" color="$emerald700" bold>
+                Turno
+              </Text>
             </HStack>
-            <Text size="sm" bold mt="$3">Período de aulas</Text>
-            <Text size="xs" color="$coolGray600" mt="$1">Manhã, tarde ou noite.</Text>
+            <Text size="sm" bold mt="$3">
+              Período de aulas
+            </Text>
+            <Text size="xs" color="$coolGray600" mt="$1">
+              Manhã, tarde ou noite.
+            </Text>
           </Box>
         </HStack>
 
@@ -118,12 +149,18 @@ export default function CreateClassPage() {
             </FormField>
 
             <VStack space="xs">
-              <Text size="sm" bold color="$coolGray800">Turno</Text>
+              <Text size="sm" bold color="$coolGray800">
+                Turno
+              </Text>
               <Pressable onPress={cycleShift} accessibilityLabel="Alternar turno">
                 <HStack
-                  bg="$coolGray50" p="$3" borderRadius="$xl"
-                  borderWidth={1} borderColor="$coolGray200"
-                  justifyContent="space-between" alignItems="center"
+                  bg="$coolGray50"
+                  p="$3"
+                  borderRadius="$xl"
+                  borderWidth={1}
+                  borderColor="$coolGray200"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
                   <Text>{SHIFT_LABELS[shift]}</Text>
                   <Ionicons name="swap-horizontal-outline" size={18} color="#475569" />
@@ -131,15 +168,27 @@ export default function CreateClassPage() {
               </Pressable>
             </VStack>
 
-            <Box bg="$coolGray50" p="$4" borderRadius="$xl" borderWidth={1} borderColor="$coolGray200">
+            <Box
+              bg="$coolGray50"
+              p="$4"
+              borderRadius="$xl"
+              borderWidth={1}
+              borderColor="$coolGray200"
+            >
               <VStack space="xs">
                 <HStack justifyContent="space-between" alignItems="center">
-                  <Text size="sm" bold>Pré-visualização</Text>
+                  <Text size="sm" bold>
+                    Pré-visualização
+                  </Text>
                   <Box px="$2" py="$1" borderRadius="$full" bg="$blue100">
-                    <Text size="xs" color="$blue700">Nova turma</Text>
+                    <Text size="xs" color="$blue700">
+                      Nova turma
+                    </Text>
                   </Box>
                 </HStack>
-                <Text size="lg" bold color="$coolGray900">{name.trim() || "Nome da turma"}</Text>
+                <Text size="lg" bold color="$coolGray900">
+                  {name.trim() || "Nome da turma"}
+                </Text>
                 <Text size="sm" color="$coolGray600">
                   Ano: {previewValid ? year : "-"} · Turno: {SHIFT_LABELS[shift]}
                 </Text>

@@ -15,7 +15,10 @@ export const handlers = [
     if (!body.name?.trim() || !body.address?.trim()) {
       return HttpResponse.json({ message: "Nome e endereço são obrigatórios." }, { status: 400 });
     }
-    return HttpResponse.json(db.createSchool({ name: body.name.trim(), address: body.address.trim() }), { status: 201 });
+    return HttpResponse.json(
+      db.createSchool({ name: body.name.trim(), address: body.address.trim() }),
+      { status: 201 },
+    );
   }),
 
   http.put(`${API_URL}/schools/:id`, async ({ request, params }) => {
@@ -24,7 +27,10 @@ export const handlers = [
     if (!body.name?.trim() || !body.address?.trim()) {
       return HttpResponse.json({ message: "Nome e endereço são obrigatórios." }, { status: 400 });
     }
-    const updated = db.updateSchool(id as string, { name: body.name.trim(), address: body.address.trim() });
+    const updated = db.updateSchool(id as string, {
+      name: body.name.trim(),
+      address: body.address.trim(),
+    });
     if (!updated) return HttpResponse.json({ message: "Escola não encontrada." }, { status: 404 });
     return HttpResponse.json(updated);
   }),
@@ -39,8 +45,10 @@ export const handlers = [
   http.get(`${API_URL}/classes`, ({ request }) => {
     const url = new URL(request.url);
     const schoolId = url.searchParams.get("schoolId");
-    if (!schoolId) return HttpResponse.json({ message: "schoolId é obrigatório." }, { status: 400 });
-    if (!db.hasSchool(schoolId)) return HttpResponse.json({ message: "Escola não encontrada." }, { status: 404 });
+    if (!schoolId)
+      return HttpResponse.json({ message: "schoolId é obrigatório." }, { status: 400 });
+    if (!db.hasSchool(schoolId))
+      return HttpResponse.json({ message: "Escola não encontrada." }, { status: 404 });
     return HttpResponse.json(db.listClasses(schoolId));
   }),
 
@@ -50,7 +58,10 @@ export const handlers = [
       return HttpResponse.json({ message: "Escola não encontrada." }, { status: 404 });
     }
     if (!body.name?.trim() || !body.shift || !body.year) {
-      return HttpResponse.json({ message: "Nome, turno e ano letivo são obrigatórios." }, { status: 400 });
+      return HttpResponse.json(
+        { message: "Nome, turno e ano letivo são obrigatórios." },
+        { status: 400 },
+      );
     }
     return HttpResponse.json(
       db.createClass(body.schoolId, { name: body.name.trim(), shift: body.shift, year: body.year }),
@@ -62,9 +73,16 @@ export const handlers = [
     const { id } = params;
     const body = (await request.json()) as Partial<SchoolClassInput>;
     if (!body.name?.trim() || !body.shift || !body.year) {
-      return HttpResponse.json({ message: "Nome, turno e ano letivo são obrigatórios." }, { status: 400 });
+      return HttpResponse.json(
+        { message: "Nome, turno e ano letivo são obrigatórios." },
+        { status: 400 },
+      );
     }
-    const updated = db.updateClass(id as string, { name: body.name.trim(), shift: body.shift, year: body.year });
+    const updated = db.updateClass(id as string, {
+      name: body.name.trim(),
+      shift: body.shift,
+      year: body.year,
+    });
     if (!updated) return HttpResponse.json({ message: "Turma não encontrada." }, { status: 404 });
     return HttpResponse.json(updated);
   }),

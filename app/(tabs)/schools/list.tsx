@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
-import {
-  Box,
-  Button,
-  ButtonText,
-  HStack,
-  Pressable,
-  Text,
-  VStack,
-} from "@gluestack-ui/themed";
+import { Box, Button, ButtonText, HStack, Pressable, Text, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
 
 import { SchoolCard } from "@/src/features/schools/components/SchoolCard";
@@ -50,15 +42,9 @@ export default function SchoolsListPage() {
     }
   }, [fetchSchools]);
 
-  const totalClasses = useMemo(
-    () => schools.reduce((acc, s) => acc + s.classCount, 0),
-    [schools],
-  );
+  const totalClasses = useMemo(() => schools.reduce((acc, s) => acc + s.classCount, 0), [schools]);
 
-  const withClasses = useMemo(
-    () => schools.filter((s) => s.classCount > 0).length,
-    [schools],
-  );
+  const withClasses = useMemo(() => schools.filter((s) => s.classCount > 0).length, [schools]);
 
   const withoutClasses = Math.max(schools.length - withClasses, 0);
 
@@ -120,7 +106,13 @@ export default function SchoolsListPage() {
               ) : null}
             </HStack>
             <Text size="xs" color="$coolGray600">
-              Última sinc.: {lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "—"}
+              Última sinc.:{" "}
+              {lastSyncAt
+                ? new Date(lastSyncAt).toLocaleTimeString("pt-BR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
+                : "—"}
             </Text>
           </HStack>
         </Box>
@@ -145,8 +137,16 @@ export default function SchoolsListPage() {
           <HStack space="xs" flexWrap="wrap">
             {[
               { key: "all" as QuickFilter, label: "Todas", color: "$blue600" },
-              { key: "with-classes" as QuickFilter, label: `Com turmas (${withClasses})`, color: "$emerald600" },
-              { key: "without-classes" as QuickFilter, label: `Sem turmas (${withoutClasses})`, color: "$amber600" },
+              {
+                key: "with-classes" as QuickFilter,
+                label: `Com turmas (${withClasses})`,
+                color: "$emerald600",
+              },
+              {
+                key: "without-classes" as QuickFilter,
+                label: `Sem turmas (${withoutClasses})`,
+                color: "$amber600",
+              },
             ].map((f) => (
               <Pressable key={f.key} onPress={() => setQuickFilter(f.key)}>
                 <Box

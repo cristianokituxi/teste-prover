@@ -61,14 +61,20 @@ export default function EditSchoolPage() {
             <HStack space="sm" alignItems="center">
               <Pressable onPress={() => router.back()}>
                 <Box
-                  w="$10" h="$10" borderRadius="$full" bg="$blue600"
-                  alignItems="center" justifyContent="center"
+                  w="$10"
+                  h="$10"
+                  borderRadius="$full"
+                  bg="$blue600"
+                  alignItems="center"
+                  justifyContent="center"
                 >
                   <Ionicons name="arrow-back" size={18} color="#ffffff" />
                 </Box>
               </Pressable>
               <VStack flex={1}>
-                <Heading size="xl" color="$white">Editar escola</Heading>
+                <Heading size="xl" color="$white">
+                  Editar escola
+                </Heading>
                 <Text size="sm" color="$blue100">
                   Atualize os dados da unidade escolar.
                 </Text>

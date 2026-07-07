@@ -2,7 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const QUEUE_KEY = "@desafio-prover:sync-queue";
 
-export type QueueOperation = "CREATE_SCHOOL" | "UPDATE_SCHOOL" | "DELETE_SCHOOL" | "CREATE_CLASS" | "UPDATE_CLASS" | "DELETE_CLASS";
+export type QueueOperation =
+  | "CREATE_SCHOOL"
+  | "UPDATE_SCHOOL"
+  | "DELETE_SCHOOL"
+  | "CREATE_CLASS"
+  | "UPDATE_CLASS"
+  | "DELETE_CLASS";
 
 export type QueueItem = {
   id: string;
@@ -22,7 +28,12 @@ export const queueService = {
     return data ? JSON.parse(data) : [];
   },
 
-  async add(operation: QueueOperation, entityId: string, payload?: unknown, schoolId?: string): Promise<void> {
+  async add(
+    operation: QueueOperation,
+    entityId: string,
+    payload?: unknown,
+    schoolId?: string,
+  ): Promise<void> {
     const queue = await this.getAll();
     queue.push({
       id: `q-${Date.now()}-${++idCounter}`,

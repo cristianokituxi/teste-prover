@@ -13,8 +13,15 @@ export function useSync() {
   const loadQueueItems = useSyncStore((s) => s.loadQueueItems);
 
   return {
-    isOnline, isSyncing, pendingCount, lastSyncAt,
-    syncProgress, syncTotal, queueItems,
-    syncNow, refreshPendingCount, loadQueueItems,
+    isOnline,
+    isSyncing,
+    pendingCount,
+    lastSyncAt,
+    syncProgress,
+    syncTotal,
+    queueItems,
+    syncNow,
+    refreshPendingCount,
+    loadQueueItems,
   };
 }

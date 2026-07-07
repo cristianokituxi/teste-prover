@@ -21,7 +21,14 @@ type ModalDeleteProps = {
   isLoading?: boolean;
 };
 
-export function ModalDelete({ isOpen, title, message, onConfirm, onCancel, isLoading }: ModalDeleteProps) {
+export function ModalDelete({
+  isOpen,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  isLoading,
+}: ModalDeleteProps) {
   return (
     <Modal isOpen={isOpen} onClose={onCancel}>
       <ModalBackdrop />

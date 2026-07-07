@@ -7,21 +7,16 @@ import { Box, HStack, Pressable, Text } from "@gluestack-ui/themed";
 import { useToastStore } from "@/src/shared/store/useToastStore";
 import type { ToastType } from "@/src/shared/store/useToastStore";
 
-const TOAST_ICONS: Record<ToastType, { name: keyof typeof Ionicons.glyphMap; bg: string; color: string }> = {
+const TOAST_ICONS: Record<
+  ToastType,
+  { name: keyof typeof Ionicons.glyphMap; bg: string; color: string }
+> = {
   success: { name: "checkmark-circle-outline", bg: "$emerald100", color: "#047857" },
   error: { name: "alert-circle-outline", bg: "$red100", color: "#dc2626" },
   info: { name: "information-circle-outline", bg: "$blue100", color: "#1d4ed8" },
 };
 
-function ToastItem({
-  id,
-  message,
-  type,
-}: {
-  id: string;
-  message: string;
-  type: ToastType;
-}) {
+function ToastItem({ id, message, type }: { id: string; message: string; type: ToastType }) {
   const removeToast = useToastStore((s) => s.removeToast);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-20)).current;

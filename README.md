@@ -24,21 +24,21 @@ Permitir que gestores escolares cadastrem, consultem, editem e excluam **escolas
 
 ## 🛠️ Stack
 
-| Categoria | Tecnologia |
-|---|---|
-| Framework | React Native `0.83` via Expo SDK `55` |
-| Linguagem | TypeScript `5.9` (strict mode) |
-| Roteamento | Expo Router (file-based routing) |
-| UI | Gluestack UI (exclusivo) |
-| Estado | Zustand `5.x` |
-| Persistência | AsyncStorage (apenas auth) |
-| Formulários | React Hook Form `7.x` + Zod `3.x` |
-| HTTP | Axios `1.x` com interceptors |
-| Mock API | Mock Service Worker (MSW) `2.x` |
-| Testes | Jest `29.x` + React Native Testing Library `14.x` |
-| Qualidade | ESLint `8.x` + Prettier `3.x` + Husky `9.x` + lint-staged |
-| CI/CD | GitHub Actions |
-| Build | EAS Build (Expo Application Services) |
+| Categoria    | Tecnologia                                                |
+| ------------ | --------------------------------------------------------- |
+| Framework    | React Native `0.83` via Expo SDK `55`                     |
+| Linguagem    | TypeScript `5.9` (strict mode)                            |
+| Roteamento   | Expo Router (file-based routing)                          |
+| UI           | Gluestack UI (exclusivo)                                  |
+| Estado       | Zustand `5.x`                                             |
+| Persistência | AsyncStorage (apenas auth)                                |
+| Formulários  | React Hook Form `7.x` + Zod `3.x`                         |
+| HTTP         | Axios `1.x` com interceptors                              |
+| Mock API     | Mock Service Worker (MSW) `2.x`                           |
+| Testes       | Jest `29.x` + React Native Testing Library `14.x`         |
+| Qualidade    | ESLint `8.x` + Prettier `3.x` + Husky `9.x` + lint-staged |
+| CI/CD        | GitHub Actions                                            |
+| Build        | EAS Build (Expo Application Services)                     |
 
 ---
 
@@ -114,21 +114,22 @@ src/
 
 ## 💡 Decisões Técnicas
 
-| Decisão | Justificativa |
-|---|---|
-| **Zustand** sobre Redux | API minimalista, menos boilerplate, persistência nativa com AsyncStorage |
-| **Feature First** | Agrupa código relacionado, facilita navegação e extração de pacotes |
-| **MSW** para mock | Padrão da indústria, intercepta no nível de rede, funciona com Axios |
-| **React Hook Form + Zod** | Performance (sem re-renders), validação type-safe em português |
-| **Axios** sobre fetch | Interceptors, timeout, melhor DX para tratamento de erros |
-| **Gluestack UI** | Design system consistente, tokens unificados, suporte a temas |
-| **Toast system** (Zustand) | Feedback visual não-invasivo com animações |
+| Decisão                    | Justificativa                                                            |
+| -------------------------- | ------------------------------------------------------------------------ |
+| **Zustand** sobre Redux    | API minimalista, menos boilerplate, persistência nativa com AsyncStorage |
+| **Feature First**          | Agrupa código relacionado, facilita navegação e extração de pacotes      |
+| **MSW** para mock          | Padrão da indústria, intercepta no nível de rede, funciona com Axios     |
+| **React Hook Form + Zod**  | Performance (sem re-renders), validação type-safe em português           |
+| **Axios** sobre fetch      | Interceptors, timeout, melhor DX para tratamento de erros                |
+| **Gluestack UI**           | Design system consistente, tokens unificados, suporte a temas            |
+| **Toast system** (Zustand) | Feedback visual não-invasivo com animações                               |
 
 ---
 
 ## ✨ Funcionalidades
 
 ### Escolas
+
 - ✅ Listagem com **Pull to Refresh**
 - ✅ **Busca em tempo real** (nome/endereço)
 - ✅ **Filtros rápidos**: Todas / Com turmas / Sem turmas
@@ -138,6 +139,7 @@ src/
 - ✅ Métricas: total de escolas e turmas
 
 ### Turmas
+
 - ✅ Listagem vinculada à escola com banner visual
 - ✅ Busca por nome ou turno
 - ✅ Cadastro com **seleção cíclica de turno** (Manhã/Tarde/Noite)
@@ -147,6 +149,7 @@ src/
 - ✅ **Ações da escola**: editar/excluir no header da tela de turmas
 
 ### UX/UI
+
 - ✅ **Dashboard** com métricas na tela inicial
 - ✅ **Skeleton Loading** durante carregamento
 - ✅ **Pull to Refresh** em todas as listagens
@@ -214,18 +217,18 @@ npm run format:check  # Verificar formatação
 
 ## 📜 Scripts
 
-| Script | Ação |
-|---|---|
-| `npm start` | Inicia Expo |
-| `npm run android` | Android |
-| `npm run ios` | iOS |
-| `npm run web` | Web |
-| `npm run typecheck` | Verifica TypeScript |
-| `npm run lint` | ESLint check |
-| `npm run lint:fix` | ESLint auto-fix |
-| `npm run format` | Prettier format |
-| `npm test` | Testes |
-| `npm run test:coverage` | Cobertura |
+| Script                  | Ação                |
+| ----------------------- | ------------------- |
+| `npm start`             | Inicia Expo         |
+| `npm run android`       | Android             |
+| `npm run ios`           | iOS                 |
+| `npm run web`           | Web                 |
+| `npm run typecheck`     | Verifica TypeScript |
+| `npm run lint`          | ESLint check        |
+| `npm run lint:fix`      | ESLint auto-fix     |
+| `npm run format`        | Prettier format     |
+| `npm test`              | Testes              |
+| `npm run test:coverage` | Cobertura           |
 
 ---
 
@@ -260,6 +263,7 @@ A versão web é publicada automaticamente via GitHub Actions em cada push para 
 ### Pipeline de Qualidade ([ci.yml](.github/workflows/ci.yml))
 
 Executa em todo push e pull request:
+
 - TypeScript typecheck
 - ESLint
 - Prettier format check
@@ -268,6 +272,7 @@ Executa em todo push e pull request:
 ### Pipeline de Deploy Web ([deploy-web.yml](.github/workflows/deploy-web.yml))
 
 Executa em push na `main`:
+
 - Build web com `expo export --platform web`
 - Deploy automático para GitHub Pages
 
@@ -275,15 +280,15 @@ Executa em push na `main`:
 
 ## 🖼️ Capturas de Tela
 
-| Login | Dashboard | Turmas |
-|---|---|---|
+| Login                                  | Dashboard                                      | Turmas                                    |
+| -------------------------------------- | ---------------------------------------------- | ----------------------------------------- |
 | ![Login](assets/screenshots/login.png) | ![Dashboard](assets/screenshots/dashboard.png) | ![Turmas](assets/screenshots/classes.png) |
 
-| Cadastro Escola | Editar Escola | Perfil |
-|---|---|---|
+| Cadastro Escola                             | Editar Escola                          | Perfil                                    |
+| ------------------------------------------- | -------------------------------------- | ----------------------------------------- |
 | ![Cadastro](assets/screenshots/schools.png) | ![Editar](assets/screenshots/edit.png) | ![Perfil](assets/screenshots/profile.png) |
 
-> 💡 *Substitua os placeholders por screenshots reais do app em execução.*
+> 💡 _Substitua os placeholders por screenshots reais do app em execução._
 
 ---
 
@@ -301,24 +306,24 @@ Executa em push na `main`:
 
 ## 📊 Trade-offs
 
-| Escolha | Trade-off |
-|---|---|
-| **MSW em memória** | Dados voláteis, reiniciam ao recarregar o app. Aceitável para demo/POC. |
-| **Formulários manuais** (sem RHF em formulários simples) | Simplicidade para forms de 2-3 campos. RHF seria overkill. |
-| **Zustand sem devtools** | Menos dependências. Adicionar é trivial se necessário. |
-| **Sem i18n inicial** | Código em português hardcoded. Estrutura pronta para extração. |
+| Escolha                                                  | Trade-off                                                               |
+| -------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **MSW em memória**                                       | Dados voláteis, reiniciam ao recarregar o app. Aceitável para demo/POC. |
+| **Formulários manuais** (sem RHF em formulários simples) | Simplicidade para forms de 2-3 campos. RHF seria overkill.              |
+| **Zustand sem devtools**                                 | Menos dependências. Adicionar é trivial se necessário.                  |
+| **Sem i18n inicial**                                     | Código em português hardcoded. Estrutura pronta para extração.          |
 
 ---
 
 ## 👥 Para Avaliadores
 
-| Informação | Detalhe |
-|---|---|
-| 🔑 **Login** | Qualquer usuário e senha não vazios |
-| ⚡ **Tempo para testar** | Menos de 2 minutos |
-| 🌐 **Versão Web** | [GitHub Pages](https://<user>.github.io/desafio-prover) |
-| 📱 **APK Preview** | [Download na Release](https://github.com/<user>/desafio-prover/releases) |
-| 📂 **Código fonte** | `src/features/` e `src/shared/` |
+| Informação               | Detalhe                                                                  |
+| ------------------------ | ------------------------------------------------------------------------ |
+| 🔑 **Login**             | Qualquer usuário e senha não vazios                                      |
+| ⚡ **Tempo para testar** | Menos de 2 minutos                                                       |
+| 🌐 **Versão Web**        | [GitHub Pages](https://<user>.github.io/desafio-prover)                  |
+| 📱 **APK Preview**       | [Download na Release](https://github.com/<user>/desafio-prover/releases) |
+| 📂 **Código fonte**      | `src/features/` e `src/shared/`                                          |
 
 ### Fluxo Sugerido para Teste
 

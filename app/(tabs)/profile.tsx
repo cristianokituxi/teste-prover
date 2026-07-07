@@ -14,20 +14,27 @@ import { SyncStatusBadge } from "@/src/shared/components/SyncStatusBadge";
 import type { QueueItem } from "@/src/shared/services/queueService";
 
 const OP_LABELS: Record<string, string> = {
-  CREATE_SCHOOL: "Criar escola", UPDATE_SCHOOL: "Editar escola", DELETE_SCHOOL: "Excluir escola",
-  CREATE_CLASS: "Criar turma", UPDATE_CLASS: "Editar turma", DELETE_CLASS: "Excluir turma",
+  CREATE_SCHOOL: "Criar escola",
+  UPDATE_SCHOOL: "Editar escola",
+  DELETE_SCHOOL: "Excluir escola",
+  CREATE_CLASS: "Criar turma",
+  UPDATE_CLASS: "Editar turma",
+  DELETE_CLASS: "Excluir turma",
 };
 
 export default function ProfilePage() {
   const userName = useAuthStore((s) => s.userName);
   const logout = useAuthStore((s) => s.logout);
   const { schools } = useSchools();
-  const { isOnline, isSyncing, pendingCount, lastSyncAt, syncNow, queueItems, loadQueueItems } = useSync();
+  const { isOnline, isSyncing, pendingCount, lastSyncAt, syncNow, queueItems, loadQueueItems } =
+    useSync();
   const showToast = useToastStore((s) => s.showToast);
 
   const totalClasses = schools.reduce((acc, s) => acc + s.classCount, 0);
 
-  useEffect(() => { loadQueueItems(); }, [loadQueueItems]);
+  useEffect(() => {
+    loadQueueItems();
+  }, [loadQueueItems]);
 
   const handleLogout = () => {
     logout();
@@ -70,7 +77,14 @@ export default function ProfilePage() {
           </Box>
 
           <Row label="Usuário" value={userName || "-"} />
-          <Row label="Conexão" value={<SyncStatusBadge status={isOnline ? "synced" : "pending"}>{isOnline ? "Online" : "Offline"}</SyncStatusBadge>} />
+          <Row
+            label="Conexão"
+            value={
+              <SyncStatusBadge status={isOnline ? "synced" : "pending"}>
+                {isOnline ? "Online" : "Offline"}
+              </SyncStatusBadge>
+            }
+          />
           <Row label="Escolas cadastradas" value={schools.length} />
           <Row label="Turmas totais" value={totalClasses} />
           <Row label="Pendências de sincronização" value={pendingCount} />
@@ -78,13 +92,10 @@ export default function ProfilePage() {
 
           <Box borderBottomWidth={1} borderColor="$coolGray200" pb="$4">
             <VStack space="sm">
-              <Text size="sm" color="$coolGray600">Ações</Text>
-              <Button
-                variant="outline"
-                size="sm"
-                onPress={handleSyncNow}
-                isDisabled={isSyncing}
-              >
+              <Text size="sm" color="$coolGray600">
+                Ações
+              </Text>
+              <Button variant="outline" size="sm" onPress={handleSyncNow} isDisabled={isSyncing}>
                 <HStack alignItems="center" space="xs">
                   {isSyncing ? (
                     <Spinner size="small" />
@@ -112,14 +123,28 @@ export default function ProfilePage() {
           {recentItems.length > 0 ? (
             <Box borderBottomWidth={1} borderColor="$coolGray200" pb="$4">
               <VStack space="sm">
-                <Text size="sm" color="$coolGray600">Fila de sincronização (simulada via MSW)</Text>
+                <Text size="sm" color="$coolGray600">
+                  Fila de sincronização (simulada via MSW)
+                </Text>
                 {recentItems.map((item: QueueItem) => (
-                  <Box key={item.id} bg="$white" p="$3" borderRadius="$md" borderWidth={1} borderColor="$coolGray200">
+                  <Box
+                    key={item.id}
+                    bg="$white"
+                    p="$3"
+                    borderRadius="$md"
+                    borderWidth={1}
+                    borderColor="$coolGray200"
+                  >
                     <HStack justifyContent="space-between" alignItems="center">
                       <VStack flex={1} space="xs">
-                        <Text size="xs" bold color="$coolGray800">{OP_LABELS[item.operation] ?? item.operation}</Text>
+                        <Text size="xs" bold color="$coolGray800">
+                          {OP_LABELS[item.operation] ?? item.operation}
+                        </Text>
                         <Text size="2xs" color="$coolGray500">
-                          {new Date(item.timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                          {new Date(item.timestamp).toLocaleTimeString("pt-BR", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
                         </Text>
                       </VStack>
                       <SyncStatusBadge status={item.status as "pending" | "synced" | "error"} />
@@ -132,9 +157,19 @@ export default function ProfilePage() {
 
           <Box borderBottomWidth={1} borderColor="$coolGray200" pb="$4">
             <VStack space="sm">
-              <Text size="sm" color="$coolGray600">Informações</Text>
-              <InfoRow icon="shield-checkmark-outline" iconColor="#1d4ed8" text="Acesso salvo localmente neste dispositivo." />
-              <InfoRow icon="cloud-outline" iconColor="#475569" text="Dados persistidos via AsyncStorage. Sincronização simulada com MSW." />
+              <Text size="sm" color="$coolGray600">
+                Informações
+              </Text>
+              <InfoRow
+                icon="shield-checkmark-outline"
+                iconColor="#1d4ed8"
+                text="Acesso salvo localmente neste dispositivo."
+              />
+              <InfoRow
+                icon="cloud-outline"
+                iconColor="#475569"
+                text="Dados persistidos via AsyncStorage. Sincronização simulada com MSW."
+              />
             </VStack>
           </Box>
 
@@ -154,20 +189,36 @@ function Row({ label, value }: { label: string; value: string | number | React.R
   return (
     <Box borderBottomWidth={1} borderColor="$coolGray200" pb="$4">
       <HStack justifyContent="space-between" alignItems="center">
-        <Text size="sm" color="$coolGray600">{label}</Text>
+        <Text size="sm" color="$coolGray600">
+          {label}
+        </Text>
         {typeof value === "string" || typeof value === "number" ? (
-          <Text size="sm" bold color="$coolGray900">{value}</Text>
-        ) : (value)}
+          <Text size="sm" bold color="$coolGray900">
+            {value}
+          </Text>
+        ) : (
+          value
+        )}
       </HStack>
     </Box>
   );
 }
 
-function InfoRow({ icon, iconColor, text }: { icon: keyof typeof Ionicons.glyphMap; iconColor: string; text: string }) {
+function InfoRow({
+  icon,
+  iconColor,
+  text,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  iconColor: string;
+  text: string;
+}) {
   return (
     <HStack alignItems="center" space="sm">
       <Ionicons name={icon} size={18} color={iconColor} />
-      <Text size="sm" color="$coolGray700">{text}</Text>
+      <Text size="sm" color="$coolGray700">
+        {text}
+      </Text>
     </HStack>
   );
 }

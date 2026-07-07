@@ -1,5 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Box, HStack, Progress, ProgressFilledTrack, Spinner, Text, VStack } from "@gluestack-ui/themed";
+import {
+  Box,
+  HStack,
+  Progress,
+  ProgressFilledTrack,
+  Spinner,
+  Text,
+  VStack,
+} from "@gluestack-ui/themed";
 
 import { useSync } from "@/src/shared/hooks/useSync";
 

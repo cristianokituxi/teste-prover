@@ -51,7 +51,6 @@ export function useSearchSchools(query: string): School[] {
   if (!normalized) return schools;
   return schools.filter(
     (s) =>
-      s.name.toLowerCase().includes(normalized) ||
-      s.address.toLowerCase().includes(normalized),
+      s.name.toLowerCase().includes(normalized) || s.address.toLowerCase().includes(normalized),
   );
 }

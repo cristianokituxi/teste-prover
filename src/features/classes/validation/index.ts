@@ -13,7 +13,10 @@ export const classSchema = z.object({
     .trim(),
   shift: shiftSchema,
   year: z
-    .number({ required_error: "O ano letivo é obrigatório.", invalid_type_error: "Ano letivo inválido." })
+    .number({
+      required_error: "O ano letivo é obrigatório.",
+      invalid_type_error: "Ano letivo inválido.",
+    })
     .int("O ano letivo deve ser um número inteiro.")
     .min(2000, "O ano letivo deve ser a partir de 2000.")
     .max(2100, "O ano letivo deve ser até 2100."),
