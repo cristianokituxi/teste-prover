@@ -32,6 +32,9 @@
       "output": "single"
     },
     "plugins": ["expo-router"],
+    "experiments": {
+      "baseUrl": "/teste-prover"
+    },
     "extra": {
       "eas": {
         "projectId": "your-eas-project-id"
