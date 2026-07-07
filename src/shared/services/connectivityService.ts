@@ -25,7 +25,7 @@ NetInfo.addEventListener((state: NetInfoState) => {
 });
 
 // Fallback: escuta eventos online/offline do browser (mais confiável na web)
-if (typeof window !== "undefined") {
+if (typeof window !== "undefined" && typeof window.addEventListener === "function") {
   window.addEventListener("online", () => notifyListeners(true));
   window.addEventListener("offline", () => notifyListeners(false));
 }
