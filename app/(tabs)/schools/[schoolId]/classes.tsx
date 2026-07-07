@@ -49,6 +49,7 @@ export default function SchoolClassesPage() {
   const [editYear, setEditYear] = useState("");
   const [editShift, setEditShift] = useState<Shift>("Morning");
   const [deleting, setDeleting] = useState<SchoolClass | null>(null);
+  const [isDeleteLocked, setIsDeleteLocked] = useState(true);
   const [deletingSchool, setDeletingSchool] = useState(false);
 
   const school = schools.find((s) => s.id === schoolId);
@@ -59,6 +60,13 @@ export default function SchoolClassesPage() {
       fetchSchools().catch(() => {});
     }
   }, [fetchClasses, fetchSchools, schoolId]);
+
+  useEffect(() => {
+    if (deleting) {
+      const timer = setTimeout(() => setIsDeleteLocked(false), 150);
+      return () => clearTimeout(timer);
+    }
+  }, [deleting]);
 
   const filtered = useMemo(() => {
     const n = query.trim().toLowerCase();
@@ -94,8 +102,13 @@ export default function SchoolClassesPage() {
     }
   };
 
+  const openDeleteModal = (c: SchoolClass) => {
+    setIsDeleteLocked(true);
+    setDeleting(c);
+  };
+
   const handleDelete = async () => {
-    if (!deleting) return;
+    if (!deleting || isDeleteLocked) return;
     try {
       await deleteClass(schoolId, deleting.id);
       showToast("Turma excluída com sucesso.", "success");
@@ -296,7 +309,7 @@ export default function SchoolClassesPage() {
           {!isLoading && filtered.length > 0 ? (
             <VStack space="sm">
               {filtered.map((c) => (
-                <ClassCard key={c.id} classItem={c} onEdit={startEdit} onDelete={setDeleting} />
+                <ClassCard key={c.id} classItem={c} onEdit={startEdit} onDelete={openDeleteModal} />
               ))}
             </VStack>
           ) : null}
@@ -307,7 +320,7 @@ export default function SchoolClassesPage() {
           title="Excluir turma"
           message={`Deseja remover a turma "${deleting?.name}"? Esta ação não pode ser desfeita.`}
           onConfirm={handleDelete}
-          onCancel={() => setDeleting(null)}
+          onCancel={() => { setDeleting(null); setIsDeleteLocked(true); }}
         />
 
         <ModalDelete
