@@ -13,7 +13,6 @@ import { Loading, Skeleton } from "@/src/shared/components/Loading";
 import { MetricCard } from "@/src/shared/components/MetricCard";
 import { ScreenContainer } from "@/src/shared/components/ScreenContainer";
 import { SearchBar } from "@/src/shared/components/SearchBar";
-import { startMockServer } from "@/src/shared/services/mockServer";
 import { db } from "@/src/shared/services/db";
 import { useSync } from "@/src/shared/hooks/useSync";
 import { SyncStatusBadge } from "@/src/shared/components/SyncStatusBadge";
@@ -29,7 +28,6 @@ export default function SchoolsListPage() {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    startMockServer();
     db.init().then(() => fetchSchools().catch(() => {}));
   }, [fetchSchools]);
 
