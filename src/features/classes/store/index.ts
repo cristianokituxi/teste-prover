@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 import { ClassRepository } from "@/src/features/classes/repository";
 import type { SchoolClass, SchoolClassInput } from "@/src/features/classes/types";
-import { refreshSchoolClassCounts } from "@/src/shared/store/crossStoreSync";
 
 type ClassState = {
   classesBySchool: Record<string, SchoolClass[]>;
@@ -17,6 +16,10 @@ type ClassState = {
 };
 
 const repository = new ClassRepository();
+
+function refreshSchoolClassCounts() {
+  require("@/src/features/schools/store").useSchoolStore.getState().fetchSchools().catch(() => {});
+}
 
 export const useClassStore = create<ClassState>((set, get) => ({
   classesBySchool: {},

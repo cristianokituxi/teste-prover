@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 import { SchoolRepository } from "@/src/features/schools/repository";
 import type { School, SchoolInput } from "@/src/features/schools/types";
-import { removeClassesForSchool } from "@/src/shared/store/crossStoreSync";
 
 type SchoolState = {
   schools: School[];
@@ -73,7 +72,11 @@ export const useSchoolStore = create<SchoolState>((set) => ({
       await repository.delete(id);
       const schools = await repository.list();
       set({ schools });
-      removeClassesForSchool(id);
+      // Lazy require quebra o ciclo de dependencia
+      const { useClassStore } = require("@/src/features/classes/store");
+      const classState = useClassStore.getState();
+      const { [id]: _, ...rest } = classState.classesBySchool;
+      useClassStore.setState({ classesBySchool: rest });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Erro ao excluir escola.";
       set({ errorMessage: message });
