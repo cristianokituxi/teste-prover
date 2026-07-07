@@ -19,8 +19,23 @@ jobs:
       - run: npm install --legacy-peer-deps
       - run: npx expo export --platform web --clear-cache
 
-      - name: Add type=module to fix import.meta on web
-        run: sed -i 's|<script src=|<script type="module" src=|' dist/index.html
+      - name: Fix type=module and add SPA fallback for GitHub Pages
+        run: |
+          # Add type=module to script tag
+          sed -i 's|<script src=|<script type="module" src=|' dist/index.html
+
+          # Create 404.html that redirects to index.html preserving the attempted path
+          cat > dist/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html><head><meta charset="utf-8"><script>
+          sessionStorage.redirect = location.pathname + location.search + location.hash;
+          location.replace('/teste-prover/');
+          </script></head><body><a href="/teste-prover/">Redirecionando...</a></body></html>
+          EOF
+
+          # Inject SPA route restoration script before </head> in index.html
+          SPA_SCRIPT='<script>!function(){var r=sessionStorage.redirect;if(r){sessionStorage.removeItem("redirect");var p=r.replace(/\\/teste-prover\\//,"/")||"/";history.replaceState(null,"",p)}}();</script>'
+          sed -i "s|</head>|${SPA_SCRIPT}</head>|" dist/index.html
 
       - name: Verify /teste-prover/ base path is present
         run: grep -q '/teste-prover/' dist/index.html || (echo "ERROR: base path /teste-prover/ missing in index.html" && exit 1)
