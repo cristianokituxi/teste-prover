@@ -18,7 +18,7 @@ Aplicacao mobile multiplataforma para **gestao de escolas publicas e turmas**, d
 
 | Web | APK |
 |---|---|
-| [cristianokituxi.github.io/teste-prover](https://cristianokituxi.github.io/teste-prover/) | Disponivel via [EAS Build](https://expo.dev/accounts/noahentregas/projects/desafio-prover/builds) |
+| [cristianokituxi.github.io/teste-prover](https://cristianokituxi.github.io/teste-prover/) | Disponivel via [EAS Build](https://expo.dev/accounts/ckituxi/projects/testeprover/builds/) |
 
 ### Screenshots
 
@@ -26,9 +26,8 @@ Aplicacao mobile multiplataforma para **gestao de escolas publicas e turmas**, d
 |:---:|:---:|:---:|
 | ![Login](assets/screenshots/login.png) | ![Dashboard](assets/screenshots/dashboard.png) | ![Turmas](assets/screenshots/classes.png) |
 
-| Cadastro Escola | Editar Escola | Perfil |
+| Cadastro Escola | Editar Escola | Escluir escola | Turma
 |:---:|:---:|:---:|
-| ![Cadastro](assets/screenshots/schools.png) | ![Editar](assets/screenshots/edit.png) | ![Perfil](assets/screenshots/profile.png) |
 
 ---
 
