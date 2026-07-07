@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Gestão Escolar",
-    "slug": "desafio-prover",
+    "slug": "testeprover",
     "scheme": "desafio-prover",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -39,10 +39,10 @@
     },
     "extra": {
       "eas": {
-        "projectId": "80f589a3-ed40-4320-88f1-2ee1e215e0c6"
+        "projectId": "51cb2ac0-9d18-42ca-92e3-ffbd301cbb37"
       },
       "router": {}
     },
-    "owner": "noahentregas"
+    "owner": "ckituxi"
   }
 }
