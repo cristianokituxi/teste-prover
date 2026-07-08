@@ -2,8 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { School, SchoolClass } from "@/src/features/schools/types";
 import type { Shift } from "@/src/features/schools/types";
 
-const SCHOOLS_KEY = "@desafio-prover:schools";
-const CLASSES_KEY = "@desafio-prover:classes";
+const SCHOOLS_KEY = "@desafio-prover:schools:v2";
+const CLASSES_KEY = "@desafio-prover:classes:v2";
 
 let seedLoaded = false;
 
