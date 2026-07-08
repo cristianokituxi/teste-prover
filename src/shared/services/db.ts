@@ -6,7 +6,7 @@ import type { SchoolClassInput } from "@/src/features/classes/types";
 import type { Shift } from "@/src/features/schools/types";
 
 const now = () => new Date().toISOString();
-const createId = () => Math.random().toString(36).slice(2, 11);
+const createId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 export const db = {
   async init(): Promise<void> {
