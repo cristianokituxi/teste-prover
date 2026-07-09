@@ -15,7 +15,7 @@ jest.mock("@expo/vector-icons", () => {
   const React = require("react");
   const RN = require("react-native");
   return {
-    Ionicons: ({ name }: any) => <RN.View testID={`icon-${name}`} />,
+    Ionicons: ({ name }) => React.createElement(RN.View, { testID: `icon-${name}` }),
   };
 });
 
@@ -23,34 +23,37 @@ jest.mock("@gluestack-ui/themed", () => {
   const React = require("react");
   const RN = require("react-native");
 
-  const createViewMock = (displayName: string) => {
-    const Comp = React.forwardRef(({ children, testID, onPress, ...props }: any, ref: any) => {
+  function createViewMock(displayName) {
+    const Comp = React.forwardRef(function ViewMock({ children, testID, onPress, ...props }, ref) {
       if (displayName === "Button" || displayName === "Pressable") {
-        return (
-          <RN.Pressable onPress={onPress} {...props} testID={testID} accessibilityLabel={props.accessibilityLabel} ref={ref}>
-            {children}
-          </RN.Pressable>
+        return React.createElement(
+          RN.Pressable,
+          { onPress, ...props, testID, accessibilityLabel: props.accessibilityLabel, ref },
+          children,
         );
       }
       if (displayName === "Modal") {
-        return props.isOpen ? <RN.View testID={testID}>{children}</RN.View> : null;
+        return props.isOpen ? React.createElement(RN.View, { testID }, children) : null;
       }
-      if (displayName === "InputField") return <RN.TextInput {...props} ref={ref} testID={testID} />;
-      return <RN.View testID={testID} {...props}>{children}</RN.View>;
+      if (displayName === "InputField") {
+        return React.createElement(RN.TextInput, { ...props, ref, testID });
+      }
+      return React.createElement(RN.View, { testID, ...props }, children);
     });
     Comp.displayName = displayName;
     return Comp;
-  };
+  }
 
-  const createTextMock = (displayName: string) =>
-    React.forwardRef(({ children, ...props }: any, ref: any) => <RN.Text ref={ref} {...props}>{children}</RN.Text>);
+  function TextMock({ children, ...props }) {
+    return React.createElement(RN.Text, props, children);
+  }
 
   return {
     Box: createViewMock("Box"),
     Button: createViewMock("Button"),
-    ButtonText: ({ children, ...props }: any) => <RN.Text {...props}>{children}</RN.Text>,
+    ButtonText: TextMock,
     Center: createViewMock("Center"),
-    Heading: ({ children, ...props }: any) => <RN.Text {...props}>{children}</RN.Text>,
+    Heading: TextMock,
     HStack: createViewMock("HStack"),
     Input: createViewMock("Input"),
     InputField: createViewMock("InputField"),
@@ -65,15 +68,15 @@ jest.mock("@gluestack-ui/themed", () => {
     ProgressFilledTrack: createViewMock("ProgressFilledTrack"),
     ScrollView: RN.ScrollView,
     Spinner: createViewMock("Spinner"),
-    Text: ({ children, ...props }: any) => <RN.Text {...props}>{children}</RN.Text>,
+    Text: TextMock,
     VStack: createViewMock("VStack"),
-    GluestackUIProvider: ({ children }: any) => children,
+    GluestackUIProvider: function Provider({ children }) { return children; },
     Image: RN.Image,
   };
 });
 
 jest.mock("@gluestack-style/react", () => ({
-  StyledProvider: ({ children }: any) => children,
+  StyledProvider: function StyledProvider({ children }) { return children; },
 }));
 
 jest.mock("@gluestack-ui/config", () => ({ config: {} }));
