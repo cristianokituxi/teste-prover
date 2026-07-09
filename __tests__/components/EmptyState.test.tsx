@@ -1,7 +1,12 @@
+import React from "react";
 import { EmptyState } from "@/src/shared/components/EmptyState";
-import { create, act } from "react-test-renderer";
+import { create, act, ReactTestRenderer } from "react-test-renderer";
 
-function render(el: any) { let t: any; act(() => { t = create(el); }); return { json: () => JSON.stringify(t.toJSON()) }; }
+function render(el: React.ReactElement): { json: () => string } {
+  let tree: ReactTestRenderer | undefined;
+  act(() => { tree = create(el); });
+  return { json: () => JSON.stringify(tree!.toJSON()) };
+}
 
 describe("EmptyState", () => {
   it("titulo e mensagem", () => expect(render(<EmptyState title="Vazio" message="Nada aqui" />).json()).toContain("Vazio"));

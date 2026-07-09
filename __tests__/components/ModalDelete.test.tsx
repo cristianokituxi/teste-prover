@@ -1,7 +1,9 @@
 import { ModalDelete } from "@/src/shared/components/ModalDelete";
 import { create, act } from "react-test-renderer";
-function r(el: any) { let t: any; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
-function n(el: any) { let t: any; act(() => { t = create(el); }); return t.toJSON(); }
+import React from "react";
+import { ReactTestRenderer } from "react-test-renderer";
+function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
+function n(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return t.toJSON(); }
 
 describe("ModalDelete", () => {
   it("aberto", () => {

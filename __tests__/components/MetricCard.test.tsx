@@ -1,6 +1,8 @@
 import { MetricCard } from "@/src/shared/components/MetricCard";
 import { create, act } from "react-test-renderer";
-function r(el: any) { let t: any; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
+import React from "react";
+import { ReactTestRenderer } from "react-test-renderer";
+function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
 
 describe("MetricCard", () => {
   it("dados", () => {
