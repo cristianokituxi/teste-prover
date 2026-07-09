@@ -51,6 +51,7 @@ export default function SchoolClassesPage() {
   const [deleting, setDeleting] = useState<SchoolClass | null>(null);
   const [isDeleteLocked, setIsDeleteLocked] = useState(true);
   const [deletingSchool, setDeletingSchool] = useState(false);
+  const [isSchoolDeleteLocked, setIsSchoolDeleteLocked] = useState(true);
 
   const school = schools.find((s) => s.id === schoolId);
 
@@ -67,6 +68,13 @@ export default function SchoolClassesPage() {
       return () => clearTimeout(timer);
     }
   }, [deleting]);
+
+  useEffect(() => {
+    if (deletingSchool) {
+      const timer = setTimeout(() => setIsSchoolDeleteLocked(false), 150);
+      return () => clearTimeout(timer);
+    }
+  }, [deletingSchool]);
 
   const filtered = useMemo(() => {
     const n = query.trim().toLowerCase();
@@ -120,6 +128,7 @@ export default function SchoolClassesPage() {
   };
 
   const handleDeleteSchool = async () => {
+    if (isSchoolDeleteLocked) return;
     try {
       await deleteSchool(schoolId);
       showToast("Escola excluída com sucesso.", "success");
@@ -127,6 +136,11 @@ export default function SchoolClassesPage() {
     } catch {
       showToast("Erro ao excluir escola.", "error");
     }
+  };
+
+  const openDeleteSchoolModal = () => {
+    setIsSchoolDeleteLocked(true);
+    setDeletingSchool(true);
   };
 
   const shiftIndex = ["Morning", "Afternoon", "Night"].indexOf(editShift);
@@ -153,7 +167,7 @@ export default function SchoolClassesPage() {
                   <Ionicons name="pencil-outline" size={22} color="#64748b" />
                 </Pressable>
                 <Pressable
-                  onPress={() => setDeletingSchool(true)}
+                  onPress={openDeleteSchoolModal}
                   hitSlop={12}
                   accessibilityLabel="Excluir escola"
                 >
@@ -328,7 +342,7 @@ export default function SchoolClassesPage() {
           title="Excluir escola"
           message={`Deseja remover permanentemente "${school?.name}" e todas as suas turmas? Esta ação não pode ser desfeita.`}
           onConfirm={handleDeleteSchool}
-          onCancel={() => setDeletingSchool(false)}
+          onCancel={() => { setDeletingSchool(false); setIsSchoolDeleteLocked(true); }}
         />
       </ScreenContainer>
 
