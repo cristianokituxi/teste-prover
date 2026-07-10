@@ -49,9 +49,7 @@ export default function SchoolClassesPage() {
   const [editYear, setEditYear] = useState("");
   const [editShift, setEditShift] = useState<Shift>("Morning");
   const [deleting, setDeleting] = useState<SchoolClass | null>(null);
-  const [isDeleteLocked, setIsDeleteLocked] = useState(true);
   const [deletingSchool, setDeletingSchool] = useState(false);
-  const [isSchoolDeleteLocked, setIsSchoolDeleteLocked] = useState(true);
 
   const school = schools.find((s) => s.id === schoolId);
 
@@ -61,20 +59,6 @@ export default function SchoolClassesPage() {
       fetchSchools().catch(() => {});
     }
   }, [fetchClasses, fetchSchools, schoolId]);
-
-  useEffect(() => {
-    if (deleting) {
-      const timer = setTimeout(() => setIsDeleteLocked(false), 150);
-      return () => clearTimeout(timer);
-    }
-  }, [deleting]);
-
-  useEffect(() => {
-    if (deletingSchool) {
-      const timer = setTimeout(() => setIsSchoolDeleteLocked(false), 150);
-      return () => clearTimeout(timer);
-    }
-  }, [deletingSchool]);
 
   const filtered = useMemo(() => {
     const n = query.trim().toLowerCase();
@@ -110,13 +94,8 @@ export default function SchoolClassesPage() {
     }
   };
 
-  const openDeleteModal = (c: SchoolClass) => {
-    setIsDeleteLocked(true);
-    setDeleting(c);
-  };
-
   const handleDelete = async () => {
-    if (!deleting || isDeleteLocked) return;
+    if (!deleting) return;
     try {
       await deleteClass(schoolId, deleting.id);
       showToast("Turma excluída com sucesso.", "success");
@@ -128,7 +107,6 @@ export default function SchoolClassesPage() {
   };
 
   const handleDeleteSchool = async () => {
-    if (isSchoolDeleteLocked) return;
     try {
       await deleteSchool(schoolId);
       showToast("Escola excluída com sucesso.", "success");
@@ -136,11 +114,6 @@ export default function SchoolClassesPage() {
     } catch {
       showToast("Erro ao excluir escola.", "error");
     }
-  };
-
-  const openDeleteSchoolModal = () => {
-    setIsSchoolDeleteLocked(true);
-    setDeletingSchool(true);
   };
 
   const shiftIndex = ["Morning", "Afternoon", "Night"].indexOf(editShift);
@@ -167,7 +140,7 @@ export default function SchoolClassesPage() {
                   <Ionicons name="pencil-outline" size={22} color="#64748b" />
                 </Pressable>
                 <Pressable
-                  onPress={openDeleteSchoolModal}
+                  onPress={() => setDeletingSchool(true)}
                   hitSlop={12}
                   accessibilityLabel="Excluir escola"
                 >
@@ -323,7 +296,7 @@ export default function SchoolClassesPage() {
           {!isLoading && filtered.length > 0 ? (
             <VStack space="sm">
               {filtered.map((c) => (
-                <ClassCard key={c.id} classItem={c} onEdit={startEdit} onDelete={openDeleteModal} />
+                <ClassCard key={c.id} classItem={c} onEdit={startEdit} onDelete={setDeleting} />
               ))}
             </VStack>
           ) : null}
@@ -334,7 +307,7 @@ export default function SchoolClassesPage() {
           title="Excluir turma"
           message={`Deseja remover a turma "${deleting?.name}"? Esta ação não pode ser desfeita.`}
           onConfirm={handleDelete}
-          onCancel={() => { setDeleting(null); setIsDeleteLocked(true); }}
+          onCancel={() => setDeleting(null)}
         />
 
         <ModalDelete
@@ -342,7 +315,7 @@ export default function SchoolClassesPage() {
           title="Excluir escola"
           message={`Deseja remover permanentemente "${school?.name}" e todas as suas turmas? Esta ação não pode ser desfeita.`}
           onConfirm={handleDeleteSchool}
-          onCancel={() => { setDeletingSchool(false); setIsSchoolDeleteLocked(true); }}
+          onCancel={() => setDeletingSchool(false)}
         />
       </ScreenContainer>
 
