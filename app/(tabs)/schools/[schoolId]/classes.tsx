@@ -113,6 +113,8 @@ export default function SchoolClassesPage() {
       router.replace("/(tabs)/schools/list");
     } catch {
       showToast("Erro ao excluir escola.", "error");
+    } finally {
+      setDeletingSchool(false);
     }
   };
 
