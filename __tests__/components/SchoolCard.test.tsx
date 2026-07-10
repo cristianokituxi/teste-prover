@@ -3,7 +3,7 @@ import { create, act } from "react-test-renderer";
 import type { School } from "@/src/features/schools/types";
 import React from "react";
 import { ReactTestRenderer } from "react-test-renderer";
-function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
+function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t!.toJSON()); }
 const s: School = { id:"s1", name:"Escola Municipal Monteiro Lobato", address:"Rua das Acacias, 450", classCount:3, createdAt:"2026-01-01T00:00:00.000Z" };
 
 describe("SchoolCard", () => {

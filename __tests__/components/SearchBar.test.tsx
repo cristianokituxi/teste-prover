@@ -2,7 +2,7 @@ import { SearchBar } from "@/src/shared/components/SearchBar";
 import { create, act } from "react-test-renderer";
 import React from "react";
 import { ReactTestRenderer } from "react-test-renderer";
-function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t.toJSON()); }
+function r(el: React.ReactElement) { let t: ReactTestRenderer | undefined; act(() => { t = create(el); }); return JSON.stringify(t!.toJSON()); }
 
 describe("SearchBar", () => {
   it("placeholder", () => expect(r(<SearchBar value="" onChangeText={jest.fn()} placeholder="Buscar..." />)).toContain("Buscar..."));
