@@ -3,7 +3,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript)](https://www.typescriptlang.org/)
 [![React Native](https://img.shields.io/badge/React%20Native-0.83-61dafb?logo=react)](https://reactnative.dev/)
 [![Expo SDK 55](https://img.shields.io/badge/Expo-SDK%2055-000020?logo=expo)](https://expo.dev/)
-[![Tests](https://img.shields.io/badge/tests-41%20passed-brightgreen)](.)
+[![Tests](https://img.shields.io/badge/tests-76%20passed-brightgreen)](.)
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](.)
 [![License](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
 
@@ -100,7 +100,7 @@ Aplicacao desenvolvida como **desafio tecnico** para demonstrar competencia em a
 | Formularios | React Hook Form `7.x` + Zod `3.x` | Validacao type-safe |
 | HTTP | Axios `1.x` | Cliente HTTP com interceptors |
 | Mock API | Custom fetch interceptor + MSW `2.x` (handlers) | Simulacao de backend |
-| Testes | Jest `29.x` + React Native Testing Library `14.x` | Testes unitarios |
+| Testes | Jest `29.x` + react-test-renderer `19.x` | Testes unitarios e de componente |
 | Qualidade | ESLint `8.x` + Prettier `3.x` + Husky `9.x` + lint-staged | Padronizacao de codigo |
 | CI/CD | GitHub Actions | Pipeline de qualidade, deploy web e build APK |
 | Build | EAS Build | Build de binarios nativos |
@@ -416,7 +416,7 @@ npx expo start --web
 ### Testes
 
 ```bash
-npm test              # 41 testes em 6 suites
+npm test              # 76 testes em 19 suites
 npm run test:watch    # Modo watch
 npm run test:coverage # Com cobertura
 ```
@@ -453,7 +453,7 @@ Perfis disponiveis:
 | Ferramenta | Proposito |
 |---|---|
 | **TypeScript strict** | `strict: true` no `tsconfig.json`. Zero `any` nao intencional. |
-| **Jest + RNTL** | 41 testes unitarios cobrindo stores, validacoes, DB e erros. |
+| **Jest + react-test-renderer** | 76 testes unitarios: 13 componentes, stores, validacoes, DB e erros. |
 | **ESLint** | Regras para React, React Hooks e TypeScript. |
 | **Prettier** | Formatacao consistente. |
 | **Husky + lint-staged** | Pre-commit hook: lint e format automaticos. |
